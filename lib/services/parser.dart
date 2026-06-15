@@ -27,11 +27,11 @@ class ArabicExpenseParser {
   };
 
   static String normalizeDigits(String s) {
-    final b = StringBuffer();
-    for (final ch in s.characters) {
-      b.write(_arabicDigits[ch] ?? ch);
-    }
-    return b.toString();
+    var out = s;
+    _arabicDigits.forEach((k, v) {
+      out = out.replaceAll(k, v);
+    });
+    return out;
   }
 
   static const _paymentKeywords = <String, String>{
