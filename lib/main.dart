@@ -11,10 +11,22 @@ import 'theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await AppDb.instance.db;
-  await NotificationService.instance.init();
-  await NotificationService.instance.scheduleAllReminders();
+  try {
+    await AppDb.instance.db;
+  } catch (e, st) {
+    debugPrint('DB init failed: $e\n$st');
+  }
   runApp(const AnaAwlaApp());
+  _initNotificationsLazy();
+}
+
+Future<void> _initNotificationsLazy() async {
+  try {
+    await NotificationService.instance.init();
+    await NotificationService.instance.scheduleAllReminders();
+  } catch (e, st) {
+    debugPrint('Notifications init failed: $e\n$st');
+  }
 }
 
 class AnaAwlaApp extends StatelessWidget {
