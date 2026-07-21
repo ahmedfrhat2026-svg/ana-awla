@@ -1,0 +1,61 @@
+name: Build RIFQ APK
+
+on:
+  push:
+    branches: [main, master, "claude/rifq-brain-rot-app-5d8ilt"]
+    paths: ["rifq/**", ".github/workflows/build-rifq-apk.yml"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: rifq
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.44.7"
+          channel: stable
+          cache: true
+
+      - name: Generate Android platform files
+        run: |
+          flutter create --platforms=android --org=com.frhat --project-name=rifq .
+          # الـ overlay يحتوي AndroidManifest المعدّل + build.gradle.kts
+          # (minSdk 23 + core library desugaring المطلوب لـ flutter_local_notifications)
+          cp -r android_overlay/app/. android/app/
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test
+
+      - name: Build debug APK (سريع التثبيت للتجربة)
+        run: flutter build apk --debug
+
+      - name: Build release APK (split per ABI)
+        run: flutter build apk --release --split-per-abi
+
+      - name: Collect APKs
+        run: |
+          mkdir -p ../out
+          cp build/app/outputs/flutter-apk/app-debug.apk ../out/rifq-debug.apk
+          cp build/app/outputs/flutter-apk/app-*-release.apk ../out/ || true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rifq-apk
+          path: out/*.apk
+          retention-days: 90

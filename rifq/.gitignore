@@ -1,0 +1,20 @@
+# Flutter/Dart
+.dart_tool/
+.packages
+build/
+pubspec.lock
+.flutter-plugins
+.flutter-plugins-dependencies
+.metadata
+
+# المجلدات المولدة عبر flutter create في CI — لا تُتتبع
+android/
+ios/
+linux/
+macos/
+windows/
+web/
+
+# IDE
+.idea/
+*.iml
