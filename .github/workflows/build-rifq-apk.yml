@@ -64,12 +64,12 @@ jobs:
           path: out/*.apk
           retention-days: 90
 
-      # عند دفع tag باسم rifq-v* يُنشأ Release عام بروابط تحميل مباشرة
+      # Release عام بروابط تحميل مباشرة — الـ action ينشئ الـ tag بنفسه
       - name: Create Release
-        if: startsWith(github.ref, 'refs/tags/rifq-v')
         uses: softprops/action-gh-release@v2
         with:
-          name: "رِفْق ${{ github.ref_name }}"
+          tag_name: rifq-v0.1.0
+          name: "رِفْق v0.1.0"
           files: out/*.apk
           body: |
             رِفْق — ارجع لنفسك على مهل 🌿
