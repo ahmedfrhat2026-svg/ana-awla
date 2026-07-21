@@ -14,6 +14,9 @@ abstract interface class NotificationScheduler {
   Future<void> scheduleDaily(UserSettings settings, List<NotificationRule> rules);
   Future<void> scheduleIntentReturn(int minutes, String companionName);
   Future<void> cancelAll();
+
+  /// معالج ضغطات التنبيهات وأزرارها — يضبطه التطبيق عند الإقلاع.
+  set onResponse(void Function(String? payload, String? actionId)? handler);
 }
 
 /// التنفيذ الفعلي عبر flutter_local_notifications.
@@ -31,6 +34,12 @@ class LocalNotificationScheduler implements NotificationScheduler {
   final _plugin = FlutterLocalNotificationsPlugin();
   bool _initialized = false;
 
+  void Function(String? payload, String? actionId)? _onResponse;
+
+  @override
+  set onResponse(void Function(String? payload, String? actionId)? handler) =>
+      _onResponse = handler;
+
   static const _channel = AndroidNotificationDetails(
     'rifq_companion',
     'رفيقك الهادئ',
@@ -47,6 +56,8 @@ class LocalNotificationScheduler implements NotificationScheduler {
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
     await _plugin.initialize(
       const InitializationSettings(android: android),
+      onDidReceiveNotificationResponse: (response) =>
+          _onResponse?.call(response.payload, response.actionId),
     );
     _initialized = true;
   }
@@ -93,6 +104,7 @@ class LocalNotificationScheduler implements NotificationScheduler {
         text,
         when,
         const NotificationDetails(android: _channel),
+        payload: 'cat:${rule.category.name}',
         androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
         matchDateTimeComponents: DateTimeComponents.time,
       );
@@ -112,12 +124,29 @@ class LocalNotificationScheduler implements NotificationScheduler {
   Future<void> scheduleIntentReturn(int minutes, String companionName) async {
     await _ensureInit();
     final when = tz.TZDateTime.now(tz.local).add(Duration(minutes: minutes));
+    // أزرار سريعة داخل التنبيه — القرار من غير ما تفتح التطبيق أصلًا.
+    const withActions = AndroidNotificationDetails(
+      'rifq_companion',
+      'رفيقك الهادئ',
+      channelDescription: 'تذكيرات هادئة قليلة من رِفْق',
+      importance: Importance.defaultImportance,
+      priority: Priority.defaultPriority,
+      playSound: false,
+      enableVibration: false,
+      actions: [
+        AndroidNotificationAction('returned', 'رجعت 🌿',
+            showsUserInterface: true),
+        AndroidNotificationAction('more5', '5 دقايق كمان',
+            showsUserInterface: true),
+      ],
+    );
     await _plugin.zonedSchedule(
       7,
       companionName,
       'أخدت الحاجة اللي دخلت عشانها؟ ارجع لحاجة حقيقية دلوقتي.',
       when,
-      const NotificationDetails(android: _channel),
+      const NotificationDetails(android: withActions),
+      payload: 'intent_return',
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
     );
   }

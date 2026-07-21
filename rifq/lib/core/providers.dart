@@ -51,6 +51,67 @@ class SettingsNotifier extends AsyncNotifier<UserSettings> {
   }
 }
 
+/// منسّق التنبيهات: إعادة الجدولة مع محاسبة التجاهل، ومعالجة الضغطات.
+final notificationCenterProvider =
+    Provider<NotificationCenter>(NotificationCenter.new);
+
+class NotificationCenter {
+  NotificationCenter(this._ref);
+
+  final Ref _ref;
+
+  /// يربط معالج ضغطات التنبيهات — يُستدعى مرة عند إقلاع التطبيق.
+  void bind() {
+    _ref.read(schedulerProvider).onResponse = _handleResponse;
+  }
+
+  void _handleResponse(String? payload, String? actionId) {
+    if (payload == null) return;
+    if (payload.startsWith('cat:')) {
+      _markEngaged(payload.substring(4));
+    } else if (payload == 'intent_return' && actionId == 'more5') {
+      _extendIntent();
+    }
+    // 'returned' أو الضغطة العادية: يكفي فتح التطبيق — بلا محاسبة.
+  }
+
+  Future<void> _markEngaged(String categoryName) async {
+    final repo = _ref.read(notificationRulesRepoProvider);
+    final engine = _ref.read(rulesEngineProvider);
+    final rules = await repo.all();
+    for (final rule in rules.where((r) => r.category.name == categoryName)) {
+      await repo.update(engine.markEngaged(rule));
+    }
+  }
+
+  Future<void> _extendIntent() async {
+    final settings = await _ref.read(settingsRepoProvider).load();
+    await _ref
+        .read(schedulerProvider)
+        .scheduleIntentReturn(5, settings.companionName);
+  }
+
+  /// إعادة جدولة اليوم كاملة: محاسبة الفئات المتجاهَلة ثم الجدولة.
+  Future<void> rescheduleAll() async {
+    final settings = await _ref.read(settingsRepoProvider).load();
+    final repo = _ref.read(notificationRulesRepoProvider);
+    final engine = _ref.read(rulesEngineProvider);
+    final now = DateTime.now();
+    final rules = await repo.all();
+    final accounted = <NotificationRule>[];
+    for (final rule in rules) {
+      final updated =
+          rule.enabled ? engine.accountOnSchedule(rule, now) : rule;
+      if (updated.ignoredCount != rule.ignoredCount ||
+          updated.lastTriggeredAt != rule.lastTriggeredAt) {
+        await repo.update(updated);
+      }
+      accounted.add(updated);
+    }
+    await _ref.read(schedulerProvider).scheduleDaily(settings, accounted);
+  }
+}
+
 /// إنجازات اليوم — للشاشة الرئيسية وحصاد اليوم.
 final todayWinsProvider = FutureProvider.autoDispose((ref) {
   final today = DateTime.now().toIso8601String().substring(0, 10);

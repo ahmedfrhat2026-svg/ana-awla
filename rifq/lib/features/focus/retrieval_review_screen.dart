@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../core/db/models.dart';
 import '../../core/providers.dart';
@@ -22,7 +25,13 @@ class _RetrievalReviewScreenState extends ConsumerState<RetrievalReviewScreen> {
   final _unclear = TextEditingController();
   final _examQuestion = TextEditingController();
   final _nextStep = TextEditingController();
+  String? _notesImagePath;
   bool _saving = false;
+
+  Future<void> _pickNotesPhoto(ImageSource source) async {
+    final picked = await ImagePicker().pickImage(source: source);
+    if (picked != null) setState(() => _notesImagePath = picked.path);
+  }
 
   @override
   void dispose() {
@@ -40,6 +49,7 @@ class _RetrievalReviewScreenState extends ConsumerState<RetrievalReviewScreen> {
       unclearPoint: _unclear.text.trim(),
       examQuestion: _examQuestion.text.trim(),
       nextStep: _nextStep.text.trim(),
+      notesImagePath: _notesImagePath,
     );
     await ref.read(focusRepoProvider).add(updated);
     ref.invalidate(recentFocusProvider);
@@ -78,6 +88,46 @@ class _RetrievalReviewScreenState extends ConsumerState<RetrievalReviewScreen> {
               controller: _nextStep,
               hint: 'الخطوة الجاية (اختياري)',
               maxLines: 1),
+          const SizedBox(height: 12),
+          SectionCard(
+            title: 'صوّر اللي كتبته بإيدك (اختياري)',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (_notesImagePath != null &&
+                    File(_notesImagePath!).existsSync())
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.file(File(_notesImagePath!),
+                          height: 140, fit: BoxFit.cover),
+                    ),
+                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        icon: const Icon(Icons.photo_camera_outlined),
+                        label: const Text('كاميرا'),
+                        onPressed: () =>
+                            _pickNotesPhoto(ImageSource.camera),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        icon: const Icon(Icons.image_outlined),
+                        label: const Text('المعرض'),
+                        onPressed: () =>
+                            _pickNotesPhoto(ImageSource.gallery),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
           const SizedBox(height: 20),
           FilledButton(
             onPressed: _saving ? null : _save,

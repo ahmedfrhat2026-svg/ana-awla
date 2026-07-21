@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/db/models.dart';
 import '../../core/providers.dart';
 import '../../shared/widgets.dart';
+import '../rewards/pebble_path.dart';
 
 /// المراجعة الأسبوعية — لغة «ماذا لاحظت؟» وليست «كيف تحسّن نتيجتك؟».
 /// اقتراح واحد فقط للأسبوع القادم، وبلا مقارنات ولا منافسة.
@@ -24,6 +25,7 @@ class WeeklyReviewScreen extends ConsumerWidget {
           return ListView(
             padding: const EdgeInsets.all(20),
             children: [
+              const PebblePathCard(),
               SectionCard(
                 title: 'جلسات التركيز',
                 child: Text(

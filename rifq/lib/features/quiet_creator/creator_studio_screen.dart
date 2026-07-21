@@ -39,9 +39,22 @@ class _CreatorStudioScreenState extends ConsumerState<CreatorStudioScreen> {
   }
 
   Future<void> _openGate(List<SmallWin> wins) async {
-    final selected = wins
-        .where((w) => w.id != null && _selectedWinIds.contains(w.id))
-        .toList();
+    // «حصاد الجمعة»: يتجمّع تلقائيًا من كل لحظات آخر أسبوع.
+    List<SmallWin> selected;
+    if (_format == ContentFormat.weeklyHarvest) {
+      final now = DateTime.now();
+      final from = now
+          .subtract(const Duration(days: 7))
+          .toIso8601String()
+          .substring(0, 10);
+      final to = now.toIso8601String().substring(0, 10);
+      selected = await ref.read(winsRepoProvider).between(from, to);
+      if (!mounted) return;
+    } else {
+      selected = wins
+          .where((w) => w.id != null && _selectedWinIds.contains(w.id))
+          .toList();
+    }
     final gate = ref.read(privacyGateProvider);
     final hasSensitive = selected.any((w) => w.category.sensitiveByDefault);
 
@@ -151,14 +164,19 @@ class _CreatorStudioScreenState extends ConsumerState<CreatorStudioScreen> {
           ),
           SectionCard(
             title: 'الصيغة',
-            child: ChoiceChips(
-              options: _formatLabels.values.toList(),
-              selected: _formatLabels[_format],
-              onSelected: (v) => setState(() {
-                _format = _formatLabels.entries
-                    .firstWhere((e) => e.value == v)
-                    .key;
-              }),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (_format == ContentFormat.weeklyHarvest)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text(
+                      'حصاد الجمعة بيتجمع تلقائيًا من كل لحظات آخر أسبوع 🌾',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
+                _formatChips(),
+              ],
             ),
           ),
           const SizedBox(height: 12),
@@ -172,6 +190,15 @@ class _CreatorStudioScreenState extends ConsumerState<CreatorStudioScreen> {
       ),
     );
   }
+
+  Widget _formatChips() => ChoiceChips(
+        options: _formatLabels.values.toList(),
+        selected: _formatLabels[_format],
+        onSelected: (v) => setState(() {
+          _format =
+              _formatLabels.entries.firstWhere((e) => e.value == v).key;
+        }),
+      );
 }
 
 /// بوابة النية والخصوصية — سؤالان ثم أربعة خيارات.

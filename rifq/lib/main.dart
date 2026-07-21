@@ -11,11 +11,23 @@ void main() {
   runApp(const ProviderScope(child: RifqApp()));
 }
 
-class RifqApp extends ConsumerWidget {
+class RifqApp extends ConsumerStatefulWidget {
   const RifqApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<RifqApp> createState() => _RifqAppState();
+}
+
+class _RifqAppState extends ConsumerState<RifqApp> {
+  @override
+  void initState() {
+    super.initState();
+    // ربط معالج ضغطات التنبيهات (أزرار «رجعت» و«5 دقايق كمان» والتفاعل).
+    ref.read(notificationCenterProvider).bind();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final settingsAsync = ref.watch(settingsProvider);
     return settingsAsync.when(
       loading: () => const MaterialApp(

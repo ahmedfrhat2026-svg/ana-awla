@@ -53,7 +53,7 @@ class _NotificationSettingsScreenState
       }
       return;
     }
-    await scheduler.scheduleDaily(settings, rules);
+    await ref.read(notificationCenterProvider).rescheduleAll();
     if (mounted) {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('اتجدول بهدوء ✓')));
@@ -126,6 +126,24 @@ class _NotificationSettingsScreenState
               subtitle: Text(
                 'الساعة ${rule.preferredHour}:${rule.preferredMinute.toString().padLeft(2, '0')}'
                 '${rule.reducedFrequency ? ' — وتيرة مخففة (اتجاهل 3 مرات)' : ''}',
+              ),
+              secondary: IconButton(
+                tooltip: 'غيّر الوقت',
+                icon: const Icon(Icons.schedule),
+                onPressed: () async {
+                  final picked = await showTimePicker(
+                    context: context,
+                    initialTime: TimeOfDay(
+                        hour: rule.preferredHour,
+                        minute: rule.preferredMinute),
+                  );
+                  if (picked == null) return;
+                  await ref.read(notificationRulesRepoProvider).update(
+                      rule.copyWith(
+                          preferredHour: picked.hour,
+                          preferredMinute: picked.minute));
+                  await _load();
+                },
               ),
               value: rule.enabled,
               onChanged: (v) async {

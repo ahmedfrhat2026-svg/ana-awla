@@ -5,6 +5,7 @@ import '../../features/fatigue/fatigue_screen.dart';
 import '../../features/focus/focus_setup_screen.dart';
 import '../../features/focus/focus_timer_screen.dart';
 import '../../features/focus/retrieval_review_screen.dart';
+import '../../features/harvest/harvest_archive_screen.dart';
 import '../../features/harvest/harvest_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/intentional_entry/intentional_entry_screen.dart';
@@ -42,6 +43,10 @@ final routerProvider = Provider<GoRouter>((ref) {
             RetrievalReviewScreen(session: state.extra! as FocusSession),
       ),
       GoRoute(path: '/harvest', builder: (_, __) => const HarvestScreen()),
+      GoRoute(
+        path: '/harvest/archive',
+        builder: (_, __) => const HarvestArchiveScreen(),
+      ),
       GoRoute(path: '/creator', builder: (_, __) => const CreatorStudioScreen()),
       GoRoute(
         path: '/creator/preview',

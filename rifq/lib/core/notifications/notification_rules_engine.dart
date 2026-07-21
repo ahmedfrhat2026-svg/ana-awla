@@ -57,9 +57,23 @@ class NotificationRulesEngine {
   NotificationRule markIgnored(NotificationRule rule) =>
       rule.copyWith(ignoredCount: rule.ignoredCount + 1);
 
-  /// تفاعل المستخدم مع التنبيه — يصفّر العداد.
-  NotificationRule markEngaged(NotificationRule rule) =>
-      rule.copyWith(ignoredCount: 0);
+  /// تفاعل المستخدم مع التنبيه — يصفّر العداد ويسجّل وقت التفاعل.
+  NotificationRule markEngaged(NotificationRule rule, {DateTime? at}) =>
+      rule.copyWith(ignoredCount: 0, lastEngagedAt: at ?? DateTime.now());
+
+  /// محاسبة التجاهل عند إعادة الجدولة:
+  /// لو التنبيه السابق أُرسل ولم يتفاعل المستخدم معه بعده، يُحسب تجاهلًا.
+  /// ثم يُسجَّل وقت الإرسال الجديد.
+  NotificationRule accountOnSchedule(NotificationRule rule, DateTime now) {
+    var updated = rule;
+    final triggered = rule.lastTriggeredAt;
+    if (triggered != null &&
+        (rule.lastEngagedAt == null ||
+            rule.lastEngagedAt!.isBefore(triggered))) {
+      updated = markIgnored(updated);
+    }
+    return updated.copyWith(lastTriggeredAt: now);
+  }
 
   /// نص التنبيه المناسب للفئة من قوائم المحتوى، بشكل دوري deterministic
   /// حسب اليوم — بدون عشوائية حتى يمكن اختباره.

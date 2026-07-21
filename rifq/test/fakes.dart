@@ -197,6 +197,11 @@ class FakeNotificationScheduler implements NotificationScheduler {
   int scheduleDailyCalls = 0;
   int intentReturnCalls = 0;
   bool permissionGranted = true;
+  void Function(String? payload, String? actionId)? handler;
+
+  @override
+  set onResponse(void Function(String? payload, String? actionId)? h) =>
+      handler = h;
 
   @override
   Future<bool> requestPermissionIfNeeded() async => permissionGranted;

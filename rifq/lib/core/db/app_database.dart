@@ -12,8 +12,24 @@ class AppDatabase {
   Future<Database> get db async {
     if (_db != null) return _db!;
     final path = '${await getDatabasesPath()}/rifq.db';
-    _db = await openDatabase(path, version: 1, onCreate: _onCreate);
+    _db = await openDatabase(
+      path,
+      version: 2,
+      onCreate: _onCreate,
+      onUpgrade: migrate,
+    );
     return _db!;
+  }
+
+  /// ترقيات المخطط — v2: صورة الملاحظات في جلسة التركيز.
+  static Future<void> migrate(
+      DatabaseExecutor d, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await d.execute(
+          'ALTER TABLE focus_session ADD COLUMN notesImagePath TEXT');
+      await d.execute(
+          'ALTER TABLE notification_rule ADD COLUMN lastEngagedAt TEXT');
+    }
   }
 
   /// للاختبارات: حقن قاعدة بيانات جاهزة (in-memory).
@@ -57,7 +73,8 @@ class AppDatabase {
         subject TEXT, task TEXT, tinyStep TEXT,
         plannedMinutes INTEGER, actualMinutes INTEGER, energyBefore INTEGER,
         status TEXT, retrievalAnswer TEXT, unclearPoint TEXT,
-        examQuestion TEXT, nextStep TEXT, startedAt TEXT, endedAt TEXT
+        examQuestion TEXT, nextStep TEXT, notesImagePath TEXT,
+        startedAt TEXT, endedAt TEXT
       )
     ''');
     await d.execute('''
@@ -94,7 +111,7 @@ class AppDatabase {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         category TEXT, enabled INTEGER,
         preferredHour INTEGER, preferredMinute INTEGER,
-        ignoredCount INTEGER, lastTriggeredAt TEXT
+        ignoredCount INTEGER, lastTriggeredAt TEXT, lastEngagedAt TEXT
       )
     ''');
     // القيم الافتراضية: إعدادات هادئة وثلاثة تنبيهات يوميًا كحد أقصى.

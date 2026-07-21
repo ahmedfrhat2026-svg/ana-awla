@@ -46,7 +46,8 @@ ThemeData _base({
     brightness: brightness,
     colorScheme: scheme,
     scaffoldBackgroundColor: background,
-    fontFamily: 'Roboto',
+    // خط Cairo لكل النصوص — عربي وإنجليزي (مضمّن محليًا، رخصة OFL).
+    fontFamily: 'Cairo',
     appBarTheme: AppBarTheme(
       backgroundColor: background,
       foregroundColor: text,

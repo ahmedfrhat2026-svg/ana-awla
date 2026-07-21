@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/content/seed_texts.dart';
 import '../../core/providers.dart';
 import '../../shared/widgets.dart';
+import '../rewards/pebble_path.dart';
 
 /// الشاشة الرئيسية — بلا أرقام صاخبة ولا Feed: أربعة أبواب للخروج إلى الحياة.
 class HomeScreen extends ConsumerWidget {
@@ -85,6 +86,7 @@ class HomeScreen extends ConsumerWidget {
             child: Text(tinyStep,
                 style: Theme.of(context).textTheme.bodyLarge),
           ),
+          const PebblePathCard(),
           Row(
             children: [
               Expanded(
@@ -125,10 +127,23 @@ class HomeScreen extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 12),
-          TextButton.icon(
-            icon: const Icon(Icons.nightlight_outlined),
-            label: const Text('دخلت في الفتور؟'),
-            onPressed: () => context.push('/fatigue'),
+          Row(
+            children: [
+              Expanded(
+                child: TextButton.icon(
+                  icon: const Icon(Icons.auto_stories_outlined),
+                  label: const Text('حصاد رحلتك'),
+                  onPressed: () => context.push('/harvest/archive'),
+                ),
+              ),
+              Expanded(
+                child: TextButton.icon(
+                  icon: const Icon(Icons.nightlight_outlined),
+                  label: const Text('دخلت في الفتور؟'),
+                  onPressed: () => context.push('/fatigue'),
+                ),
+              ),
+            ],
           ),
           const GentleFooter(text: 'خطوتك الصغيرة اليوم كافية كبداية.'),
         ],

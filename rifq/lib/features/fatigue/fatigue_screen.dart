@@ -70,11 +70,7 @@ class _FatigueScreenState extends ConsumerState<FatigueScreen> {
           fatigueModeUntil: DateTime.now().add(const Duration(days: 3)),
         ));
     // إعادة الجدولة بوتيرة الرحمة (تنبيه واحد يوميًا).
-    final rules = await ref.read(notificationRulesRepoProvider).all();
-    final updated = ref.read(settingsProvider).valueOrNull;
-    if (updated != null) {
-      await ref.read(schedulerProvider).scheduleDaily(updated, rules);
-    }
+    await ref.read(notificationCenterProvider).rescheduleAll();
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(fatigueGentleTexts[

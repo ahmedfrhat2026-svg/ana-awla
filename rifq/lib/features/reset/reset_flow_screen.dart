@@ -185,11 +185,12 @@ class _ResetFlowScreenState extends ConsumerState<ResetFlowScreen> {
         ],
       );
 
-  Widget _heartView() => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+  Widget _heartView() => ListView(
         children: [
+          const SizedBox(height: 24),
           Text('ارجع لقلبك',
-              style: Theme.of(context).textTheme.headlineSmall),
+              style: Theme.of(context).textTheme.headlineSmall,
+              textAlign: TextAlign.center),
           const SizedBox(height: 24),
           SectionCard(
             child: Column(
@@ -207,7 +208,21 @@ class _ResetFlowScreenState extends ConsumerState<ResetFlowScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 32),
+          if (_sacred.hasTadabbur)
+            SectionCard(
+              title: 'تدبّر معي',
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('«${_sacred.tadabbur!}»',
+                      style: Theme.of(context).textTheme.bodyLarge),
+                  const SizedBox(height: 8),
+                  Text(_sacred.tadabburSource!,
+                      style: Theme.of(context).textTheme.bodySmall),
+                ],
+              ),
+            ),
+          const SizedBox(height: 24),
           FilledButton(
             onPressed: () => setState(() => _step = _Step.need),
             child: const Text('كمّل'),

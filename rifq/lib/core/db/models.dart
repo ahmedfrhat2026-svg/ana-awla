@@ -296,6 +296,7 @@ class FocusSession {
     this.unclearPoint = '',
     this.examQuestion = '',
     this.nextStep = '',
+    this.notesImagePath,
     this.startedAt,
     this.endedAt,
   });
@@ -312,6 +313,9 @@ class FocusSession {
   final String unclearPoint;
   final String examQuestion;
   final String nextStep;
+
+  /// صورة اختيارية لما كتبته بخط يدك في الجلسة.
+  final String? notesImagePath;
   final DateTime? startedAt;
   final DateTime? endedAt;
 
@@ -326,6 +330,7 @@ class FocusSession {
     String? unclearPoint,
     String? examQuestion,
     String? nextStep,
+    String? notesImagePath,
     DateTime? startedAt,
     DateTime? endedAt,
   }) =>
@@ -342,6 +347,7 @@ class FocusSession {
         unclearPoint: unclearPoint ?? this.unclearPoint,
         examQuestion: examQuestion ?? this.examQuestion,
         nextStep: nextStep ?? this.nextStep,
+        notesImagePath: notesImagePath ?? this.notesImagePath,
         startedAt: startedAt ?? this.startedAt,
         endedAt: endedAt ?? this.endedAt,
       );
@@ -359,6 +365,7 @@ class FocusSession {
         'unclearPoint': unclearPoint,
         'examQuestion': examQuestion,
         'nextStep': nextStep,
+        'notesImagePath': notesImagePath,
         'startedAt': startedAt?.toIso8601String(),
         'endedAt': endedAt?.toIso8601String(),
       };
@@ -376,6 +383,7 @@ class FocusSession {
         unclearPoint: m['unclearPoint'] as String? ?? '',
         examQuestion: m['examQuestion'] as String? ?? '',
         nextStep: m['nextStep'] as String? ?? '',
+        notesImagePath: m['notesImagePath'] as String?,
         startedAt: DateTime.tryParse(m['startedAt'] as String? ?? ''),
         endedAt: DateTime.tryParse(m['endedAt'] as String? ?? ''),
       );
@@ -608,6 +616,7 @@ class NotificationRule {
     this.preferredMinute = 0,
     this.ignoredCount = 0,
     this.lastTriggeredAt,
+    this.lastEngagedAt,
   });
 
   final int? id;
@@ -618,6 +627,9 @@ class NotificationRule {
   final int ignoredCount;
   final DateTime? lastTriggeredAt;
 
+  /// آخر مرة تفاعل فيها المستخدم مع تنبيه من هذه الفئة (ضغط عليه).
+  final DateTime? lastEngagedAt;
+
   /// بعد ثلاث تجاهلات متتالية تقل وتيرة هذه الفئة (يومًا بعد يوم بدل يوميًا).
   bool get reducedFrequency => ignoredCount >= 3;
 
@@ -627,6 +639,7 @@ class NotificationRule {
     int? preferredMinute,
     int? ignoredCount,
     DateTime? lastTriggeredAt,
+    DateTime? lastEngagedAt,
   }) =>
       NotificationRule(
         id: id,
@@ -636,6 +649,7 @@ class NotificationRule {
         preferredMinute: preferredMinute ?? this.preferredMinute,
         ignoredCount: ignoredCount ?? this.ignoredCount,
         lastTriggeredAt: lastTriggeredAt ?? this.lastTriggeredAt,
+        lastEngagedAt: lastEngagedAt ?? this.lastEngagedAt,
       );
 
   Map<String, Object?> toMap() => {
@@ -646,6 +660,7 @@ class NotificationRule {
         'preferredMinute': preferredMinute,
         'ignoredCount': ignoredCount,
         'lastTriggeredAt': lastTriggeredAt?.toIso8601String(),
+        'lastEngagedAt': lastEngagedAt?.toIso8601String(),
       };
 
   factory NotificationRule.fromMap(Map<String, Object?> m) => NotificationRule(
@@ -657,5 +672,6 @@ class NotificationRule {
         preferredMinute: m['preferredMinute'] as int? ?? 0,
         ignoredCount: m['ignoredCount'] as int? ?? 0,
         lastTriggeredAt: DateTime.tryParse(m['lastTriggeredAt'] as String? ?? ''),
+        lastEngagedAt: DateTime.tryParse(m['lastEngagedAt'] as String? ?? ''),
       );
 }
