@@ -14,14 +14,16 @@ class AppDatabase {
     final path = '${await getDatabasesPath()}/rifq.db';
     _db = await openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: _onCreate,
       onUpgrade: migrate,
     );
     return _db!;
   }
 
-  /// ترقيات المخطط — v2: صورة الملاحظات في جلسة التركيز.
+  /// ترقيات المخطط:
+  /// v2: صورة الملاحظات + تتبع التفاعل مع التنبيهات.
+  /// v3: الفويس نوت + رقم آخر نسخة مشاهدة + حد السوشيال اليومي.
   static Future<void> migrate(
       DatabaseExecutor d, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
@@ -29,6 +31,14 @@ class AppDatabase {
           'ALTER TABLE focus_session ADD COLUMN notesImagePath TEXT');
       await d.execute(
           'ALTER TABLE notification_rule ADD COLUMN lastEngagedAt TEXT');
+    }
+    if (oldVersion < 3) {
+      await d.execute('ALTER TABLE focus_session ADD COLUMN voiceNotePath TEXT');
+      await d.execute('ALTER TABLE reflection ADD COLUMN voicePath TEXT');
+      await d.execute(
+          'ALTER TABLE user_settings ADD COLUMN lastSeenVersion TEXT');
+      await d.execute(
+          'ALTER TABLE user_settings ADD COLUMN socialLimitMinutes INTEGER');
     }
   }
 
@@ -51,6 +61,8 @@ class AppDatabase {
         onboardingDone INTEGER,
         fatigueModeUntil TEXT,
         goals TEXT,
+        lastSeenVersion TEXT,
+        socialLimitMinutes INTEGER,
         createdAt TEXT
       )
     ''');
@@ -74,7 +86,7 @@ class AppDatabase {
         plannedMinutes INTEGER, actualMinutes INTEGER, energyBefore INTEGER,
         status TEXT, retrievalAnswer TEXT, unclearPoint TEXT,
         examQuestion TEXT, nextStep TEXT, notesImagePath TEXT,
-        startedAt TEXT, endedAt TEXT
+        voiceNotePath TEXT, startedAt TEXT, endedAt TEXT
       )
     ''');
     await d.execute('''
@@ -88,7 +100,7 @@ class AppDatabase {
       CREATE TABLE reflection(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         date TEXT, learned TEXT, gratitude TEXT,
-        releaseThought TEXT, moodAfter INTEGER, createdAt TEXT
+        releaseThought TEXT, moodAfter INTEGER, voicePath TEXT, createdAt TEXT
       )
     ''');
     await d.execute('''

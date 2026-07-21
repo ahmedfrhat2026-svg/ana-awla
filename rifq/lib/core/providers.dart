@@ -36,6 +36,16 @@ final schedulerProvider =
     Provider<NotificationScheduler>((_) => LocalNotificationScheduler());
 final instagramLauncherProvider =
     Provider<InstagramLauncher>((_) => const UrlInstagramLauncher());
+final usageStatsProvider =
+    Provider<UsageStatsGateway>((_) => const MethodChannelUsageStats());
+
+/// هل مُنحت صلاحية Usage Access؟
+final usagePermissionProvider = FutureProvider.autoDispose<bool>(
+    (ref) => ref.watch(usageStatsProvider).hasPermission);
+
+/// دقائق إنستجرام اليوم — null لو الصلاحية غير ممنوحة.
+final instagramUsageProvider = FutureProvider.autoDispose<int?>((ref) =>
+    ref.watch(usageStatsProvider).usageTodayMinutes(instagramPackage));
 
 /// الإعدادات الحالية — تُحمَّل مرة وتُحدَّث عند أي تغيير.
 final settingsProvider =

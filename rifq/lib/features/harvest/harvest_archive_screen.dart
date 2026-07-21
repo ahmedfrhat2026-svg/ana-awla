@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/db/models.dart';
 import '../../core/providers.dart';
+import '../../shared/voice_recorder.dart';
 import '../../shared/widgets.dart';
 
 /// أرشيف الحصاد: كل ما وثّقته خلال الأسبوع أو الشهر —
@@ -168,6 +169,30 @@ class _HarvestArchiveScreenState extends ConsumerState<HarvestArchiveScreen> {
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 6),
                                 child: Text('• ${r.gratitude}'),
+                              ),
+                          ],
+                        ),
+                      ),
+                    if (reflections.any((r) =>
+                        r.voicePath != null &&
+                        File(r.voicePath!).existsSync()))
+                      SectionCard(
+                        title: 'تسجيلاتك الصوتية',
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            for (final r in reflections.where((r) =>
+                                r.voicePath != null &&
+                                File(r.voicePath!).existsSync()))
+                              Row(
+                                children: [
+                                  Text(r.date,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall),
+                                  Expanded(
+                                      child: VoicePlayback(path: r.voicePath!)),
+                                ],
                               ),
                           ],
                         ),

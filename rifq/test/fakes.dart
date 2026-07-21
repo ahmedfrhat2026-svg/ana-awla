@@ -230,3 +230,19 @@ class FakeInstagramLauncher implements InstagramLauncher {
     return true;
   }
 }
+
+class FakeUsageStatsGateway implements UsageStatsGateway {
+  bool permission = true;
+  int minutes = 20;
+  int openSettingsCalls = 0;
+
+  @override
+  Future<bool> get hasPermission async => permission;
+
+  @override
+  Future<void> openPermissionSettings() async => openSettingsCalls++;
+
+  @override
+  Future<int?> usageTodayMinutes(String packageName) async =>
+      permission ? minutes : null;
+}

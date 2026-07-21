@@ -2,14 +2,62 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/app_info.dart';
 import '../../core/content/seed_texts.dart';
 import '../../core/providers.dart';
 import '../../shared/widgets.dart';
 import '../rewards/pebble_path.dart';
 
 /// الشاشة الرئيسية — بلا أرقام صاخبة ولا Feed: أربعة أبواب للخروج إلى الحياة.
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  bool _whatsNewChecked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _maybeShowWhatsNew());
+  }
+
+  /// «ما الجديد» — يظهر مرة واحدة فقط بعد كل تحديث.
+  Future<void> _maybeShowWhatsNew() async {
+    if (_whatsNewChecked) return;
+    _whatsNewChecked = true;
+    final settings = ref.read(settingsProvider).valueOrNull;
+    if (settings == null ||
+        !settings.onboardingDone ||
+        settings.lastSeenVersion == appVersion) {
+      return;
+    }
+    final items = whatsNew[appVersion] ?? const <String>[];
+    if (items.isEmpty || !mounted) return;
+    await showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('الجديد في نسخة $appVersion 🌿'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [for (final item in items) Text('• $item\n')],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('جميل'),
+          ),
+        ],
+      ),
+    );
+    await ref
+        .read(settingsProvider.notifier)
+        .save(settings.copyWith(lastSeenVersion: appVersion));
+  }
 
   String _greeting() {
     final h = DateTime.now().hour;
@@ -19,7 +67,7 @@ class HomeScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final settings = ref.watch(settingsProvider).valueOrNull;
     final tinyStep = tinyActions[DateTime.now().day % tinyActions.length];
     final fatigueActive = settings?.fatigueModeActive ?? false;
@@ -111,9 +159,9 @@ class HomeScreen extends ConsumerWidget {
             children: [
               Expanded(
                 child: OutlinedButton.icon(
-                  icon: const Icon(Icons.photo_camera_outlined),
-                  label: const Text('دخول إنستجرام بنية'),
-                  onPressed: () => context.push('/instagram'),
+                  icon: const Icon(Icons.timelapse_outlined),
+                  label: const Text('وقتك على السوشيال'),
+                  onPressed: () => context.push('/usage'),
                 ),
               ),
               const SizedBox(width: 12),
@@ -130,22 +178,41 @@ class HomeScreen extends ConsumerWidget {
           Row(
             children: [
               Expanded(
+                child: OutlinedButton.icon(
+                  icon: const Icon(Icons.photo_camera_outlined),
+                  label: const Text('دخول إنستجرام بنية'),
+                  onPressed: () => context.push('/instagram'),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
                 child: TextButton.icon(
                   icon: const Icon(Icons.auto_stories_outlined),
                   label: const Text('حصاد رحلتك'),
                   onPressed: () => context.push('/harvest/archive'),
                 ),
               ),
-              Expanded(
-                child: TextButton.icon(
-                  icon: const Icon(Icons.nightlight_outlined),
-                  label: const Text('دخلت في الفتور؟'),
-                  onPressed: () => context.push('/fatigue'),
-                ),
-              ),
             ],
           ),
+          Center(
+            child: TextButton.icon(
+              icon: const Icon(Icons.nightlight_outlined),
+              label: const Text('دخلت في الفتور؟'),
+              onPressed: () => context.push('/fatigue'),
+            ),
+          ),
           const GentleFooter(text: 'خطوتك الصغيرة اليوم كافية كبداية.'),
+          Center(
+            child: Text(
+              'رِفْق $appVersion',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.4)),
+            ),
+          ),
+          const SizedBox(height: 8),
         ],
       ),
     );

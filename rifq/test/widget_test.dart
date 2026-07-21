@@ -23,6 +23,7 @@ Widget _app(Widget child, {List<Override> overrides = const []}) {
       checkInRepoProvider.overrideWithValue(FakeCheckInRepository()),
       schedulerProvider.overrideWithValue(FakeNotificationScheduler()),
       instagramLauncherProvider.overrideWithValue(FakeInstagramLauncher()),
+      usageStatsProvider.overrideWithValue(FakeUsageStatsGateway()),
       ...overrides,
     ],
     child: MaterialApp(

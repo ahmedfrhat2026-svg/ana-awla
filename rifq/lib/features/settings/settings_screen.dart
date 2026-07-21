@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/app_info.dart';
 import '../../core/db/models.dart';
 import '../../core/providers.dart';
 import '../../shared/widgets.dart';
@@ -99,6 +100,35 @@ class SettingsScreen extends ConsumerWidget {
             title: const Text('الأمان وحدود التطبيق'),
             trailing: const Icon(Icons.chevron_left),
             onTap: () => context.push('/safety'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.info_outline),
+            title: const Text('الإصدار'),
+            subtitle: const Text('رِفْق $appVersion'),
+            trailing: TextButton(
+              child: const Text('ما الجديد؟'),
+              onPressed: () => showDialog<void>(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('الجديد في $appVersion'),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      for (final item
+                          in whatsNew[appVersion] ?? const <String>[])
+                        Text('• $item\n'),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('تمام'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
           const SectionCard(
             title: 'الخصوصية',

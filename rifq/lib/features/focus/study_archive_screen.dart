@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/db/models.dart';
 import '../../core/providers.dart';
+import '../../shared/voice_recorder.dart';
 import '../../shared/widgets.dart';
 
 /// أرشيف المذاكرة: كل جلساتك السابقة بما كتبته فيها —
@@ -119,6 +120,12 @@ class _SessionCard extends StatelessWidget {
                 child: Image.file(File(session.notesImagePath!),
                     height: 120, fit: BoxFit.cover),
               ),
+            ),
+          if (session.voiceNotePath != null &&
+              File(session.voiceNotePath!).existsSync())
+            Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: VoicePlayback(path: session.voiceNotePath!),
             ),
         ],
       ),

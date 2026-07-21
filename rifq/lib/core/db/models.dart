@@ -78,6 +78,8 @@ class UserSettings {
     this.onboardingDone = false,
     this.fatigueModeUntil,
     this.goals = const <String>[],
+    this.lastSeenVersion = '',
+    this.socialLimitMinutes = 60,
     this.createdAt,
   });
 
@@ -94,6 +96,12 @@ class UserSettings {
   /// عند تفعيل «وضع الفتور» يظل التطبيق في وضع الرحمة حتى هذا التاريخ.
   final DateTime? fatigueModeUntil;
   final List<String> goals;
+
+  /// آخر نسخة شاهد المستخدم «ما الجديد» فيها.
+  final String lastSeenVersion;
+
+  /// حد السوشيال اليومي بالدقائق (لمراقبة الاستخدام).
+  final int socialLimitMinutes;
   final DateTime? createdAt;
 
   bool get fatigueModeActive =>
@@ -111,6 +119,8 @@ class UserSettings {
     DateTime? fatigueModeUntil,
     bool clearFatigueMode = false,
     List<String>? goals,
+    String? lastSeenVersion,
+    int? socialLimitMinutes,
   }) =>
       UserSettings(
         id: id,
@@ -125,6 +135,8 @@ class UserSettings {
         fatigueModeUntil:
             clearFatigueMode ? null : (fatigueModeUntil ?? this.fatigueModeUntil),
         goals: goals ?? this.goals,
+        lastSeenVersion: lastSeenVersion ?? this.lastSeenVersion,
+        socialLimitMinutes: socialLimitMinutes ?? this.socialLimitMinutes,
         createdAt: createdAt,
       );
 
@@ -140,6 +152,8 @@ class UserSettings {
         'onboardingDone': onboardingDone ? 1 : 0,
         'fatigueModeUntil': fatigueModeUntil?.toIso8601String(),
         'goals': goals.join('|'),
+        'lastSeenVersion': lastSeenVersion,
+        'socialLimitMinutes': socialLimitMinutes,
         'createdAt': (createdAt ?? DateTime.now()).toIso8601String(),
       };
 
@@ -161,6 +175,8 @@ class UserSettings {
             .split('|')
             .where((s) => s.isNotEmpty)
             .toList(),
+        lastSeenVersion: m['lastSeenVersion'] as String? ?? '',
+        socialLimitMinutes: m['socialLimitMinutes'] as int? ?? 60,
         createdAt: m['createdAt'] == null
             ? null
             : DateTime.tryParse(m['createdAt'] as String),
@@ -297,6 +313,7 @@ class FocusSession {
     this.examQuestion = '',
     this.nextStep = '',
     this.notesImagePath,
+    this.voiceNotePath,
     this.startedAt,
     this.endedAt,
   });
@@ -316,6 +333,9 @@ class FocusSession {
 
   /// صورة اختيارية لما كتبته بخط يدك في الجلسة.
   final String? notesImagePath;
+
+  /// تسجيل صوتي اختياري تلخّص فيه الجلسة بصوتك.
+  final String? voiceNotePath;
   final DateTime? startedAt;
   final DateTime? endedAt;
 
@@ -331,6 +351,7 @@ class FocusSession {
     String? examQuestion,
     String? nextStep,
     String? notesImagePath,
+    String? voiceNotePath,
     DateTime? startedAt,
     DateTime? endedAt,
   }) =>
@@ -348,6 +369,7 @@ class FocusSession {
         examQuestion: examQuestion ?? this.examQuestion,
         nextStep: nextStep ?? this.nextStep,
         notesImagePath: notesImagePath ?? this.notesImagePath,
+        voiceNotePath: voiceNotePath ?? this.voiceNotePath,
         startedAt: startedAt ?? this.startedAt,
         endedAt: endedAt ?? this.endedAt,
       );
@@ -366,6 +388,7 @@ class FocusSession {
         'examQuestion': examQuestion,
         'nextStep': nextStep,
         'notesImagePath': notesImagePath,
+        'voiceNotePath': voiceNotePath,
         'startedAt': startedAt?.toIso8601String(),
         'endedAt': endedAt?.toIso8601String(),
       };
@@ -384,6 +407,7 @@ class FocusSession {
         examQuestion: m['examQuestion'] as String? ?? '',
         nextStep: m['nextStep'] as String? ?? '',
         notesImagePath: m['notesImagePath'] as String?,
+        voiceNotePath: m['voiceNotePath'] as String?,
         startedAt: DateTime.tryParse(m['startedAt'] as String? ?? ''),
         endedAt: DateTime.tryParse(m['endedAt'] as String? ?? ''),
       );
@@ -454,6 +478,7 @@ class Reflection {
     this.gratitude = '',
     this.releaseThought = '',
     this.moodAfter = 3,
+    this.voicePath,
     this.createdAt,
   });
 
@@ -463,6 +488,9 @@ class Reflection {
   final String gratitude;
   final String releaseThought;
   final int moodAfter;
+
+  /// تسجيل صوتي اختياري لحصاد اليوم.
+  final String? voicePath;
   final DateTime? createdAt;
 
   Map<String, Object?> toMap() => {
@@ -472,6 +500,7 @@ class Reflection {
         'gratitude': gratitude,
         'releaseThought': releaseThought,
         'moodAfter': moodAfter,
+        'voicePath': voicePath,
         'createdAt': (createdAt ?? DateTime.now()).toIso8601String(),
       };
 
@@ -482,6 +511,7 @@ class Reflection {
         gratitude: m['gratitude'] as String? ?? '',
         releaseThought: m['releaseThought'] as String? ?? '',
         moodAfter: m['moodAfter'] as int? ?? 3,
+        voicePath: m['voicePath'] as String?,
         createdAt: DateTime.tryParse(m['createdAt'] as String? ?? ''),
       );
 }

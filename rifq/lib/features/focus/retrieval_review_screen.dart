@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../core/db/models.dart';
 import '../../core/providers.dart';
+import '../../shared/voice_recorder.dart';
 import '../../shared/widgets.dart';
 
 /// اختبار الاسترجاع بعد الجلسة — استرجاع المعلومة من الذاكرة بدل إعادة القراءة.
@@ -26,6 +27,7 @@ class _RetrievalReviewScreenState extends ConsumerState<RetrievalReviewScreen> {
   final _examQuestion = TextEditingController();
   final _nextStep = TextEditingController();
   String? _notesImagePath;
+  String? _voiceNotePath;
   bool _saving = false;
 
   Future<void> _pickNotesPhoto(ImageSource source) async {
@@ -50,6 +52,7 @@ class _RetrievalReviewScreenState extends ConsumerState<RetrievalReviewScreen> {
       examQuestion: _examQuestion.text.trim(),
       nextStep: _nextStep.text.trim(),
       notesImagePath: _notesImagePath,
+      voiceNotePath: _voiceNotePath,
     );
     await ref.read(focusRepoProvider).add(updated);
     ref.invalidate(recentFocusProvider);
@@ -127,6 +130,11 @@ class _RetrievalReviewScreenState extends ConsumerState<RetrievalReviewScreen> {
                 ),
               ],
             ),
+          ),
+          const SizedBox(height: 12),
+          SectionCard(
+            title: 'أو لخّص بصوتك (اختياري)',
+            child: VoiceRecorder(onChanged: (p) => _voiceNotePath = p),
           ),
           const SizedBox(height: 20),
           FilledButton(

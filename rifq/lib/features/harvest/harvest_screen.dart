@@ -7,6 +7,7 @@ import '../../core/content/seed_texts.dart';
 import '../../core/db/models.dart';
 import '../../core/privacy/safety_check.dart';
 import '../../core/providers.dart';
+import '../../shared/voice_recorder.dart';
 import '../../shared/widgets.dart';
 
 /// حصاد اليوم: توثيق الإنجازات الصغيرة + التأمل المسائي.
@@ -26,6 +27,7 @@ class _HarvestScreenState extends ConsumerState<HarvestScreen> {
   final _release = TextEditingController();
   WinCategory _category = WinCategory.habit;
   String? _imagePath;
+  String? _voicePath;
   int _mood = 3;
 
   static const _categoryLabels = {
@@ -109,6 +111,7 @@ class _HarvestScreenState extends ConsumerState<HarvestScreen> {
           gratitude: _gratitude.text.trim(),
           releaseThought: _release.text.trim(),
           moodAfter: _mood,
+          voicePath: _voicePath,
         ));
     if (mounted) context.go('/');
   }
@@ -200,6 +203,8 @@ class _HarvestScreenState extends ConsumerState<HarvestScreen> {
                 CalmTextField(
                     controller: _release,
                     hint: 'حاجة هسيبها ومش هشيلها لبكرة'),
+                const SizedBox(height: 10),
+                VoiceRecorder(onChanged: (p) => _voicePath = p),
                 const SizedBox(height: 10),
                 Row(
                   children: [

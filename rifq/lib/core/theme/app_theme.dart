@@ -90,9 +90,29 @@ ThemeData _base({
     pageTransitionsTheme: const PageTransitionsTheme(builders: {
       TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
     }),
-    textTheme: (brightness == Brightness.light
-            ? Typography.material2021(platform: TargetPlatform.android).black
-            : Typography.material2021(platform: TargetPlatform.android).white)
-        .apply(bodyColor: text, displayColor: text),
+    textTheme: _boldTitles(
+      (brightness == Brightness.light
+              ? Typography.material2021(platform: TargetPlatform.android).black
+              : Typography.material2021(platform: TargetPlatform.android)
+                  .white)
+          .apply(bodyColor: text, displayColor: text),
+    ),
+  );
+}
+
+/// خط Cairo متغيّر الوزن (Variable Font) — الأوزان الثقيلة تحتاج تفعيلًا
+/// صريحًا عبر FontVariation حتى تظهر عناوين جريئة حقيقية بدل bold صناعي.
+TextTheme _boldTitles(TextTheme base) {
+  const bold = [FontVariation('wght', 700)];
+  const semi = [FontVariation('wght', 600)];
+  TextStyle? w(TextStyle? s, List<FontVariation> v, FontWeight fw) =>
+      s?.copyWith(fontVariations: v, fontWeight: fw);
+  return base.copyWith(
+    displayLarge: w(base.displayLarge, bold, FontWeight.w700),
+    displayMedium: w(base.displayMedium, bold, FontWeight.w700),
+    headlineMedium: w(base.headlineMedium, bold, FontWeight.w700),
+    headlineSmall: w(base.headlineSmall, bold, FontWeight.w700),
+    titleLarge: w(base.titleLarge, semi, FontWeight.w600),
+    titleMedium: w(base.titleMedium, semi, FontWeight.w600),
   );
 }

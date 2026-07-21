@@ -10,6 +10,7 @@ import '../../features/harvest/harvest_archive_screen.dart';
 import '../../features/harvest/harvest_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/intentional_entry/intentional_entry_screen.dart';
+import '../../features/intentional_entry/usage_monitor_screen.dart';
 import '../../features/onboarding/onboarding_screen.dart';
 import '../../features/quiet_creator/creator_studio_screen.dart';
 import '../../features/quiet_creator/preview_screen.dart';
@@ -61,6 +62,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/instagram',
         builder: (_, __) => const IntentionalEntryScreen(),
+      ),
+      GoRoute(
+        path: '/usage',
+        builder: (_, __) => const UsageMonitorScreen(),
       ),
       GoRoute(path: '/weekly', builder: (_, __) => const WeeklyReviewScreen()),
       GoRoute(path: '/fatigue', builder: (_, __) => const FatigueScreen()),

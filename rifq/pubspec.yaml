@@ -1,7 +1,7 @@
 name: rifq
 description: "رِفْق — ارجع لنفسك على مهل. رفيق هادئ للهدوء والمذاكرة وتوثيق الإنجازات الصغيرة."
 publish_to: none
-version: 0.2.0+2
+version: 0.3.0+3
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
@@ -24,6 +24,8 @@ dependencies:
   image_picker: ^1.1.2
   permission_handler: ^11.3.1
   url_launcher: ^6.3.0
+  record: ^5.2.0
+  audioplayers: ^6.1.0
 
 dev_dependencies:
   flutter_test:
