@@ -69,7 +69,16 @@ class _FocusSetupScreenState extends ConsumerState<FocusSetupScreen> {
         : 'إذا ${_situation.text.trim().isEmpty ? 'جلست على المكتب' : _situation.text.trim()}، '
             'فسوف ${_tinyStep.text.trim()}.';
     return Scaffold(
-      appBar: AppBar(title: const Text('جلسة «افتح بس»')),
+      appBar: AppBar(
+        title: const Text('جلسة «افتح بس»'),
+        actions: [
+          IconButton(
+            tooltip: 'أرشيف مذاكرتك ومراجعة أسئلتك',
+            icon: const Icon(Icons.history_edu_outlined),
+            onPressed: () => context.push('/focus/archive'),
+          ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
