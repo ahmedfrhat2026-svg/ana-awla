@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/providers.dart';
 import 'core/routing/router.dart';
-import 'core/theme/app_theme.dart';
+import 'design_system/rifq_theme.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
