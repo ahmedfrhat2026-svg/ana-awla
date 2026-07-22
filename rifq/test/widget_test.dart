@@ -27,33 +27,49 @@ Widget _app(Widget child, {List<Override> overrides = const []}) {
       ...overrides,
     ],
     child: MaterialApp(
-      home: Directionality(
-        textDirection: TextDirection.rtl,
-        child: child,
+      home: Builder(
+        builder: (context) => MediaQuery(
+          // تقليل الحركة في الاختبارات: يوقف الحلقة المحيطة اللانهائية
+          // فيستقر pumpAndSettle، ويتحقق من مسار «تقليل الحركة».
+          data: MediaQuery.of(context).copyWith(disableAnimations: true),
+          child: Directionality(
+            textDirection: TextDirection.rtl,
+            child: child,
+          ),
+        ),
       ),
     ),
   );
 }
 
 void main() {
-  testWidgets('الشاشة الرئيسية تعرض الأبواب الأربعة والسؤال الرئيسي',
+  testWidgets('الحديقة الحية تعرض الأنظمة الثلاثة كوجهات واضحة',
       (tester) async {
     await tester.pumpWidget(_app(const HomeScreen()));
     await tester.pumpAndSettle();
 
-    expect(find.text('ماذا تحتاج الآن؟'), findsOneWidget);
-    expect(find.text('أهدأ'), findsOneWidget);
-    expect(find.text('أذاكر'), findsOneWidget);
+    // الوجهات الثلاث حاضرة بتسمياتها العربية الواضحة.
+    expect(find.text('المرآة'), findsOneWidget);
+    expect(find.text('البوصلة'), findsOneWidget);
+    expect(find.text('الملجأ'), findsOneWidget);
+    // مع سطورها الشارحة (الفهم لا يعتمد على الرسم وحده).
+    expect(find.text('تأمل ما عشته'), findsOneWidget);
+    expect(find.text('اختر اتجاهك'), findsOneWidget);
+    expect(find.text('افهم ما تحتاجه الآن'), findsOneWidget);
+    // الفعل المباشر الواحد (أسفل المشهد — يُمرَّر إليه).
+    await tester.scrollUntilVisible(
+        find.text('أحتاج أن أهدأ الآن'), 200,
+        scrollable: find.byType(Scrollable).first);
+    expect(find.text('أحتاج أن أهدأ الآن'), findsOneWidget);
+  });
 
-    // العناصر الأدنى في ListView تُبنى عند التمرير فقط.
-    await tester.scrollUntilVisible(
-        find.text('أنقذني من التمرير'), 200,
-        scrollable: find.byType(Scrollable).first);
-    expect(find.text('أنقذني من التمرير'), findsOneWidget);
-    await tester.scrollUntilVisible(
-        find.text('خطوتك الصغيرة اليوم كافية كبداية.'), 200,
-        scrollable: find.byType(Scrollable).first);
-    expect(find.text('خطوتك الصغيرة اليوم كافية كبداية.'), findsOneWidget);
+  testWidgets('الوجهات لها مساحات لمس دلالية ومتاحة لقارئ الشاشة',
+      (tester) async {
+    await tester.pumpWidget(_app(const HomeScreen()));
+    await tester.pumpAndSettle();
+    // تسمية دلالية مجمّعة (عنوان + شرح) لكل وجهة.
+    expect(
+        find.bySemanticsLabel('المرآة — تأمل ما عشته'), findsOneWidget);
   });
 
   testWidgets('Onboarding يبدأ برسالة الباب ولا يطلب صلاحيات',

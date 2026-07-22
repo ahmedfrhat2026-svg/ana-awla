@@ -1,3 +1,4 @@
+import 'package:rifq/core/app_info.dart';
 import 'package:rifq/core/db/models.dart';
 import 'package:rifq/core/db/repositories.dart';
 import 'package:rifq/core/instagram/instagram_launcher.dart';
@@ -6,7 +7,9 @@ import 'package:rifq/core/notifications/notification_scheduler.dart';
 /// تنفيذات وهمية في الذاكرة للاختبارات — بلا sqflite وبلا Plugins.
 
 class FakeSettingsRepository implements SettingsRepository {
-  UserSettings stored = const UserSettings(onboardingDone: true);
+  // lastSeenVersion مضبوط للنسخة الحالية حتى لا يظهر «ما الجديد» في الاختبارات.
+  UserSettings stored =
+      const UserSettings(onboardingDone: true, lastSeenVersion: appVersion);
 
   @override
   Future<UserSettings> load() async => stored;

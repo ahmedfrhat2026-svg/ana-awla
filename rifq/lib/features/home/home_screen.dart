@@ -3,10 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/app_info.dart';
-import '../../core/content/seed_texts.dart';
 import '../../core/providers.dart';
-import '../../shared/widgets.dart';
+import '../../design_system/rifq_spacing.dart';
+import '../../design_system/rifq_theme_extensions.dart';
 import '../rewards/pebble_path.dart';
+import 'widgets/living_garden.dart';
 
 /// الشاشة الرئيسية — بلا أرقام صاخبة ولا Feed: أربعة أبواب للخروج إلى الحياة.
 class HomeScreen extends ConsumerStatefulWidget {
@@ -66,155 +67,138 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return 'مساء السكينة';
   }
 
+  /// جملة قصيرة مبنية على حالة المستخدم الفعلية — بلا ادعاء بما لا نعرفه.
+  String _stateSentence(bool fatigue, int todayWins) {
+    if (fatigue) {
+      return 'وضع الرحمة مفعّل. لا تحتاج أن تعوّض شيئًا — افتح الباب فقط.';
+    }
+    if (todayWins > 0) {
+      return 'تركت أثرًا اليوم بالفعل. المساحة هنا كلما احتجتها.';
+    }
+    final h = DateTime.now().hour;
+    if (h < 12)
+      return 'لا تحتاج أن تصلح اليوم كله الآن. ابدأ بما تحتاجه هذه اللحظة.';
+    if (h < 18) return 'هناك مساحة صغيرة يمكنك العودة إليها.';
+    return 'مساء هادئ. ماذا تحتاج قبل أن ينتهي اليوم؟';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final palette = RifqPalette.of(context);
     final settings = ref.watch(settingsProvider).valueOrNull;
-    final tinyStep = tinyActions[DateTime.now().day % tinyActions.length];
     final fatigueActive = settings?.fatigueModeActive ?? false;
+    final todayWins = ref.watch(todayWinsProvider).valueOrNull?.length ?? 0;
+
+    final destinations = [
+      GardenDestination(
+        label: 'المرآة',
+        hint: 'تأمل ما عشته',
+        icon: Icons.water_drop_outlined,
+        alignment: const Alignment(-0.85, 0.55),
+        onTap: () => context.push('/mirror'),
+      ),
+      GardenDestination(
+        label: 'البوصلة',
+        hint: 'اختر اتجاهك',
+        icon: Icons.explore_outlined,
+        alignment: const Alignment(0.15, 0.95),
+        onTap: () => context.push('/compass'),
+      ),
+      GardenDestination(
+        label: 'الملجأ',
+        hint: 'افهم ما تحتاجه الآن',
+        icon: Icons.cottage_outlined,
+        alignment: const Alignment(0.9, 0.15),
+        onTap: () => context.push('/sanctuary'),
+      ),
+    ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_greeting()),
-        actions: [
-          IconButton(
-            tooltip: 'الإعدادات',
-            icon: const Icon(Icons.settings_outlined),
-            onPressed: () => context.push('/settings'),
-          ),
-        ],
+      backgroundColor: palette.canvas,
+      body: SafeArea(
+        child: ListView(
+          padding: RifqSpacing.page,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(_greeting(),
+                      style: Theme.of(context).textTheme.headlineSmall),
+                ),
+                IconButton(
+                  tooltip: 'الإعدادات',
+                  icon: const Icon(Icons.settings_outlined),
+                  onPressed: () => context.push('/settings'),
+                ),
+              ],
+            ),
+            const SizedBox(height: RifqSpacing.xs),
+            Text(
+              _stateSentence(fatigueActive, todayWins),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.copyWith(color: palette.textSecondary),
+            ),
+            const SizedBox(height: RifqSpacing.md),
+            LivingGarden(destinations: destinations),
+            const SizedBox(height: RifqSpacing.lg),
+            // فعل واحد واضح مباشر.
+            FilledButton.icon(
+              icon: const Icon(Icons.self_improvement),
+              label: const Text('أحتاج أن أهدأ الآن'),
+              onPressed: () => context.push('/reset'),
+            ),
+            const SizedBox(height: RifqSpacing.xl),
+            const PebblePathCard(),
+            // أدوات هادئة ثانوية — تبقى كل الميزات في متناول اليد.
+            _quietUtilities(context, palette),
+            const SizedBox(height: RifqSpacing.lg),
+            Center(
+              child: Text('رِفْق $appVersion',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: palette.textSecondary.withValues(alpha: 0.7))),
+            ),
+            const SizedBox(height: RifqSpacing.sm),
+          ],
+        ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
+    );
+  }
+
+  Widget _quietUtilities(BuildContext context, RifqPalette palette) {
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        tilePadding: EdgeInsets.zero,
+        childrenPadding: EdgeInsets.zero,
+        title: Text('أدوات هادئة',
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(color: palette.textSecondary)),
         children: [
-          if (fatigueActive)
-            SectionCard(
-              child: Row(
-                children: [
-                  const Icon(Icons.spa_outlined),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      'وضع الرحمة والعودة مفعّل — المطلوب النهارده الحفاظ على الخيط بس.',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          Text('ماذا تحتاج الآن؟',
-              style: Theme.of(context).textTheme.headlineSmall),
-          const SizedBox(height: 12),
-          BigActionButton(
-            icon: Icons.self_improvement,
-            title: 'أهدأ',
-            subtitle: 'جلسة تنفّس وذِكر وتهدئة',
-            onTap: () => context.push('/reset'),
-          ),
-          BigActionButton(
-            icon: Icons.menu_book_outlined,
-            title: 'أذاكر',
-            subtitle: 'أصغر خطوة ثم جلسة تركيز',
-            onTap: () => context.push('/focus'),
-          ),
-          BigActionButton(
-            icon: Icons.favorite_outline,
-            title: 'أوثّق لحظتي',
-            subtitle: 'إنجاز صغير، صورة أو جملة',
-            onTap: () => context.push('/harvest'),
-          ),
-          BigActionButton(
-            icon: Icons.u_turn_right,
-            title: 'أنقذني من التمرير',
-            subtitle: 'إيقاف لحظي واستعادة النية',
-            onTap: () => context.push('/reset'),
-          ),
-          const SizedBox(height: 8),
-          SectionCard(
-            title: 'خطوتك الصغيرة اليوم',
-            child: Text(tinyStep,
-                style: Theme.of(context).textTheme.bodyLarge),
-          ),
-          const PebblePathCard(),
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  icon: const Icon(Icons.wb_twilight),
-                  label: const Text('حصاد اليوم'),
-                  onPressed: () => context.push('/harvest'),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: OutlinedButton.icon(
-                  icon: const Icon(Icons.edit_note),
-                  label: const Text('المؤثر الهادئ'),
-                  onPressed: () => context.push('/creator'),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  icon: const Icon(Icons.timelapse_outlined),
-                  label: const Text('وقتك على السوشيال'),
-                  onPressed: () => context.push('/usage'),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: OutlinedButton.icon(
-                  icon: const Icon(Icons.calendar_view_week_outlined),
-                  label: const Text('مراجعة الأسبوع'),
-                  onPressed: () => context.push('/weekly'),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  icon: const Icon(Icons.photo_camera_outlined),
-                  label: const Text('دخول إنستجرام بنية'),
-                  onPressed: () => context.push('/instagram'),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: TextButton.icon(
-                  icon: const Icon(Icons.auto_stories_outlined),
-                  label: const Text('حصاد رحلتك'),
-                  onPressed: () => context.push('/harvest/archive'),
-                ),
-              ),
-            ],
-          ),
-          Center(
-            child: TextButton.icon(
-              icon: const Icon(Icons.nightlight_outlined),
-              label: const Text('دخلت في الفتور؟'),
-              onPressed: () => context.push('/fatigue'),
-            ),
-          ),
-          const GentleFooter(text: 'خطوتك الصغيرة اليوم كافية كبداية.'),
-          Center(
-            child: Text(
-              'رِفْق $appVersion',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onSurface
-                      .withValues(alpha: 0.4)),
-            ),
-          ),
-          const SizedBox(height: 8),
+          _util(context, Icons.wb_twilight, 'حصاد اليوم', '/harvest'),
+          _util(
+              context, Icons.timelapse_outlined, 'وقتك على السوشيال', '/usage'),
+          _util(context, Icons.photo_camera_outlined, 'دخول إنستجرام بنية',
+              '/instagram'),
+          _util(context, Icons.edit_note, 'المؤثر الهادئ', '/creator'),
+          _util(context, Icons.nightlight_outlined, 'دخلت في الفتور؟',
+              '/fatigue'),
         ],
       ),
+    );
+  }
+
+  Widget _util(
+      BuildContext context, IconData icon, String label, String route) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: Icon(icon),
+      title: Text(label),
+      trailing: const Icon(Icons.chevron_left, size: 20),
+      onTap: () => context.push(route),
     );
   }
 }

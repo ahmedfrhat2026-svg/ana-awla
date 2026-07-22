@@ -9,6 +9,7 @@ import '../../features/focus/study_archive_screen.dart';
 import '../../features/harvest/harvest_archive_screen.dart';
 import '../../features/harvest/harvest_screen.dart';
 import '../../features/home/home_screen.dart';
+import '../../features/home/system_hub.dart';
 import '../../features/intentional_entry/intentional_entry_screen.dart';
 import '../../features/intentional_entry/usage_monitor_screen.dart';
 import '../../features/onboarding/onboarding_screen.dart';
@@ -31,6 +32,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         (settings != null && !settings.onboardingDone) ? '/onboarding' : '/',
     routes: [
       GoRoute(path: '/', builder: (_, __) => const HomeScreen()),
+      GoRoute(path: '/mirror', builder: (_, __) => const MirrorHubScreen()),
+      GoRoute(path: '/compass', builder: (_, __) => const CompassHubScreen()),
+      GoRoute(
+          path: '/sanctuary', builder: (_, __) => const SanctuaryHubScreen()),
       GoRoute(path: '/onboarding', builder: (_, __) => const OnboardingScreen()),
       GoRoute(path: '/reset', builder: (_, __) => const ResetFlowScreen()),
       GoRoute(path: '/focus', builder: (_, __) => const FocusSetupScreen()),
