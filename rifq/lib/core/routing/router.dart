@@ -13,6 +13,8 @@ import '../../features/home/system_hub.dart';
 import '../../features/compass/decision_room_screen.dart';
 import '../../features/compass/values_garden_screen.dart';
 import '../../features/mirror/museum_of_returning_screen.dart';
+import '../../features/sanctuary/retreat_screen.dart';
+import '../../features/sanctuary/sanctuary_screen.dart';
 import '../../features/intentional_entry/intentional_entry_screen.dart';
 import '../../features/intentional_entry/usage_monitor_screen.dart';
 import '../../features/onboarding/onboarding_screen.dart';
@@ -50,6 +52,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/compass/decision',
         builder: (_, __) => const DecisionRoomScreen(),
+      ),
+      GoRoute(
+        path: '/sanctuary/feeling',
+        builder: (_, __) => const SanctuaryScreen(),
+      ),
+      GoRoute(
+        path: '/sanctuary/retreat',
+        builder: (_, __) => const RetreatScreen(),
       ),
       GoRoute(
           path: '/onboarding', builder: (_, __) => const OnboardingScreen()),

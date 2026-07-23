@@ -309,6 +309,18 @@ class SanctuaryHubScreen extends StatelessWidget {
         intro: 'مساحة صغيرة تفهمك بسرعة، ثم تعيدك للحياة.',
         entries: [
           HubEntry(
+            title: 'ماذا يحدث داخلك الآن؟',
+            subtitle: 'اختر أقرب شعور، وخذ خطوة واحدة',
+            icon: Icons.favorite_outline,
+            route: '/sanctuary/feeling',
+          ),
+          HubEntry(
+            title: 'وضع الخلوة',
+            subtitle: 'اترك الهاتف، واذهب لتعيش قليلًا',
+            icon: Icons.park_outlined,
+            route: '/sanctuary/retreat',
+          ),
+          HubEntry(
             title: 'أهدأ / أنا تايه دلوقتي',
             subtitle: 'تنفّس، ذِكر، وخطوة أرضية',
             icon: Icons.self_improvement,
@@ -316,7 +328,7 @@ class SanctuaryHubScreen extends StatelessWidget {
           ),
           HubEntry(
             title: 'دخلت في الفتور؟',
-            subtitle: 'وضع الرحمة والعودة',
+            subtitle: 'وضع الرحمة والعودة لأيام',
             icon: Icons.nightlight_outlined,
             route: '/fatigue',
           ),
