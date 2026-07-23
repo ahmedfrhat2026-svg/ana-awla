@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../design_system/components/rifq_scaffold.dart';
 import '../../design_system/components/rifq_surfaces.dart';
 import '../../design_system/rifq_spacing.dart';
 import '../../design_system/rifq_theme_extensions.dart';
+import '../mirror/return_moment.dart';
+import '../mirror/widgets/still_water.dart';
 
 /// عنصر داخل غرفة نظام — عنوان، سطر، وأيقونة، يفتح مسارًا موجودًا.
 class HubEntry {
@@ -94,41 +97,106 @@ class SystemHubScreen extends StatelessWidget {
 }
 
 /// 🪞 المرآة — تأمل ما عشته.
-class MirrorHubScreen extends StatelessWidget {
+/// تبدأ بماء ساكن يحمل حصوات عودتك وجملة وصفية، ثم مداخل التأمل.
+class MirrorHubScreen extends ConsumerWidget {
   const MirrorHubScreen({super.key});
 
+  static const _entries = [
+    HubEntry(
+      title: 'متحف العودة',
+      subtitle: 'لحظات رجوعك بعد الانقطاع',
+      icon: Icons.water_drop_outlined,
+      route: '/mirror/museum',
+    ),
+    HubEntry(
+      title: 'أوثّق لحظتي',
+      subtitle: 'اترك أثرًا صغيرًا من يومك',
+      icon: Icons.favorite_outline,
+      route: '/harvest',
+    ),
+    HubEntry(
+      title: 'حصاد رحلتك',
+      subtitle: 'كل ما عشته خلال أسبوع أو شهر',
+      icon: Icons.auto_stories_outlined,
+      route: '/harvest/archive',
+    ),
+    HubEntry(
+      title: 'سكينة الأسبوع',
+      subtitle: 'ماذا لاحظت؟ لا كيف كانت نتيجتك',
+      icon: Icons.nights_stay_outlined,
+      route: '/weekly',
+    ),
+    HubEntry(
+      title: 'أرشيف مذاكرتك',
+      subtitle: 'جلساتك وأسئلتك المتوقعة',
+      icon: Icons.history_edu_outlined,
+      route: '/focus/archive',
+    ),
+  ];
+
   @override
-  Widget build(BuildContext context) => const SystemHubScreen(
-        title: 'المرآة',
-        intro: 'تأمل ما عشته — من غير محاكمة ولا أرقام.',
-        entries: [
-          HubEntry(
-            title: 'أوثّق لحظتي',
-            subtitle: 'اترك أثرًا صغيرًا من يومك',
-            icon: Icons.favorite_outline,
-            route: '/harvest',
+  Widget build(BuildContext context, WidgetRef ref) {
+    final palette = RifqPalette.of(context);
+    final summary = ref.watch(returnsSummaryProvider).valueOrNull;
+
+    return RifqScaffold(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          RifqPageHeader(
+            title: 'المرآة',
+            subtitle: 'تأمل ما عشته — من غير محاكمة ولا أرقام.',
+            onBack: () => context.pop(),
           ),
-          HubEntry(
-            title: 'حصاد رحلتك',
-            subtitle: 'كل ما عشته خلال أسبوع أو شهر',
-            icon: Icons.auto_stories_outlined,
-            route: '/harvest/archive',
-          ),
-          HubEntry(
-            title: 'سكينة الأسبوع',
-            subtitle: 'ماذا لاحظت؟ لا كيف كانت نتيجتك',
-            icon: Icons.nights_stay_outlined,
-            route: '/weekly',
-          ),
-          HubEntry(
-            title: 'أرشيف مذاكرتك',
-            subtitle: 'جلساتك وأسئلتك المتوقعة',
-            icon: Icons.history_edu_outlined,
-            route: '/focus/archive',
+          StillWaterHeader(stoneCount: summary?.total ?? 0),
+          const SizedBox(height: RifqSpacing.md),
+          if (summary != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: RifqSpacing.lg),
+              child: Text(summary.sentence,
+                  style: Theme.of(context).textTheme.titleMedium),
+            ),
+          for (final e in _entries) ...[
+            RifqOrganicSurface(
+              onTap: () => context.push(e.route),
+              padding: const EdgeInsets.all(RifqSpacing.md),
+              child: Row(
+                children: [
+                  Icon(e.icon, color: palette.forest, size: 28),
+                  const SizedBox(width: RifqSpacing.md),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(e.title,
+                            style: Theme.of(context).textTheme.titleMedium),
+                        const SizedBox(height: 2),
+                        Text(e.subtitle,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(color: palette.textSecondary)),
+                      ],
+                    ),
+                  ),
+                  Icon(Icons.chevron_left, color: palette.textSecondary),
+                ],
+              ),
+            ),
+            const SizedBox(height: RifqSpacing.sm),
+          ],
+          const SizedBox(height: RifqSpacing.sm),
+          Center(
+            child: Text('كل أثر هنا كان يومًا عشته فعلًا.',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall
+                    ?.copyWith(color: palette.textSecondary)),
           ),
         ],
-        footer: 'كل سطر هنا كان يومًا عشته فعلًا.',
-      );
+      ),
+    );
+  }
 }
 
 /// 🧭 البوصلة — اختر اتجاهك.

@@ -10,6 +10,7 @@ import '../../features/harvest/harvest_archive_screen.dart';
 import '../../features/harvest/harvest_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/home/system_hub.dart';
+import '../../features/mirror/museum_of_returning_screen.dart';
 import '../../features/intentional_entry/intentional_entry_screen.dart';
 import '../../features/intentional_entry/usage_monitor_screen.dart';
 import '../../features/onboarding/onboarding_screen.dart';
@@ -33,6 +34,10 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(path: '/', builder: (_, __) => const HomeScreen()),
       GoRoute(path: '/mirror', builder: (_, __) => const MirrorHubScreen()),
+      GoRoute(
+        path: '/mirror/museum',
+        builder: (_, __) => const MuseumOfReturningScreen(),
+      ),
       GoRoute(path: '/compass', builder: (_, __) => const CompassHubScreen()),
       GoRoute(
           path: '/sanctuary', builder: (_, __) => const SanctuaryHubScreen()),
