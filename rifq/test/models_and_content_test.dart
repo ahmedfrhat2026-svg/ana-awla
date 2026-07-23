@@ -49,8 +49,7 @@ void main() {
       final active = UserSettings(
           fatigueModeUntil: DateTime.now().add(const Duration(days: 1)));
       final expired = UserSettings(
-          fatigueModeUntil:
-              DateTime.now().subtract(const Duration(days: 1)));
+          fatigueModeUntil: DateTime.now().subtract(const Duration(days: 1)));
       expect(active.fatigueModeActive, isTrue);
       expect(expired.fatigueModeActive, isFalse);
       expect(const UserSettings().fatigueModeActive, isFalse);

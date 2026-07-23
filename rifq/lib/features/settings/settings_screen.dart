@@ -38,7 +38,8 @@ class SettingsScreen extends ConsumerWidget {
                 TextFormField(
                   initialValue: settings.companionName,
                   decoration: const InputDecoration(labelText: 'اسم الرفيق'),
-                  onFieldSubmitted: (v) => notifier.save(settings.copyWith(companionName: v.trim())),
+                  onFieldSubmitted: (v) =>
+                      notifier.save(settings.copyWith(companionName: v.trim())),
                 ),
                 const SizedBox(height: 12),
                 ChoiceChips(
@@ -80,7 +81,8 @@ class SettingsScreen extends ConsumerWidget {
                   const Text('التطبيق في وضع الرحمة والعودة لتلات أيام.'),
                   const SizedBox(height: 8),
                   OutlinedButton(
-                    onPressed: () => notifier.save(settings.copyWith(clearFatigueMode: true)),
+                    onPressed: () => notifier
+                        .save(settings.copyWith(clearFatigueMode: true)),
                     child: const Text('رجعت — أوقف وضع الرحمة'),
                   ),
                 ],
@@ -89,9 +91,8 @@ class SettingsScreen extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.notifications_none),
             title: const Text('جدول التنبيهات'),
-            subtitle:
-                Text('${settings.notificationsPerDay} يوميًا كحد أقصى — '
-                    'صمت من ${settings.quietHoursStart} لـ ${settings.quietHoursEnd}'),
+            subtitle: Text('${settings.notificationsPerDay} يوميًا كحد أقصى — '
+                'صمت من ${settings.quietHoursStart} لـ ${settings.quietHoursEnd}'),
             trailing: const Icon(Icons.chevron_left),
             onTap: () => context.push('/settings/notifications'),
           ),

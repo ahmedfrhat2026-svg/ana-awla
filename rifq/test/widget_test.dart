@@ -57,8 +57,7 @@ void main() {
     expect(find.text('اختر اتجاهك'), findsOneWidget);
     expect(find.text('افهم ما تحتاجه الآن'), findsOneWidget);
     // الفعل المباشر الواحد (أسفل المشهد — يُمرَّر إليه).
-    await tester.scrollUntilVisible(
-        find.text('أحتاج أن أهدأ الآن'), 200,
+    await tester.scrollUntilVisible(find.text('أحتاج أن أهدأ الآن'), 200,
         scrollable: find.byType(Scrollable).first);
     expect(find.text('أحتاج أن أهدأ الآن'), findsOneWidget);
   });
@@ -68,12 +67,10 @@ void main() {
     await tester.pumpWidget(_app(const HomeScreen()));
     await tester.pumpAndSettle();
     // تسمية دلالية مجمّعة (عنوان + شرح) لكل وجهة.
-    expect(
-        find.bySemanticsLabel('المرآة — تأمل ما عشته'), findsOneWidget);
+    expect(find.bySemanticsLabel('المرآة — تأمل ما عشته'), findsOneWidget);
   });
 
-  testWidgets('Onboarding يبدأ برسالة الباب ولا يطلب صلاحيات',
-      (tester) async {
+  testWidgets('Onboarding يبدأ برسالة الباب ولا يطلب صلاحيات', (tester) async {
     await tester.pumpWidget(_app(const OnboardingScreen()));
     await tester.pumpAndSettle();
 
@@ -93,8 +90,7 @@ void main() {
     await tester.tap(find.text('فقدت الحماس'));
     await tester.pumpAndSettle();
 
-    await tester.scrollUntilVisible(
-        find.text('فعّل وضع الرحمة'), 200,
+    await tester.scrollUntilVisible(find.text('فعّل وضع الرحمة'), 200,
         scrollable: find.byType(Scrollable).first);
     expect(find.text('فعّل وضع الرحمة'), findsOneWidget);
     expect(find.textContaining('الحد الأدنى'), findsOneWidget);

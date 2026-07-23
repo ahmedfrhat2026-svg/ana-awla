@@ -76,8 +76,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       return 'تركت أثرًا اليوم بالفعل. المساحة هنا كلما احتجتها.';
     }
     final h = DateTime.now().hour;
-    if (h < 12)
+    if (h < 12) {
       return 'لا تحتاج أن تصلح اليوم كله الآن. ابدأ بما تحتاجه هذه اللحظة.';
+    }
     if (h < 18) return 'هناك مساحة صغيرة يمكنك العودة إليها.';
     return 'مساء هادئ. ماذا تحتاج قبل أن ينتهي اليوم؟';
   }

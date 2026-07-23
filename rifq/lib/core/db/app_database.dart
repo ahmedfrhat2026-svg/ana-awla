@@ -27,16 +27,17 @@ class AppDatabase {
   static Future<void> migrate(
       DatabaseExecutor d, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
-      await d.execute(
-          'ALTER TABLE focus_session ADD COLUMN notesImagePath TEXT');
+      await d
+          .execute('ALTER TABLE focus_session ADD COLUMN notesImagePath TEXT');
       await d.execute(
           'ALTER TABLE notification_rule ADD COLUMN lastEngagedAt TEXT');
     }
     if (oldVersion < 3) {
-      await d.execute('ALTER TABLE focus_session ADD COLUMN voiceNotePath TEXT');
+      await d
+          .execute('ALTER TABLE focus_session ADD COLUMN voiceNotePath TEXT');
       await d.execute('ALTER TABLE reflection ADD COLUMN voicePath TEXT');
-      await d.execute(
-          'ALTER TABLE user_settings ADD COLUMN lastSeenVersion TEXT');
+      await d
+          .execute('ALTER TABLE user_settings ADD COLUMN lastSeenVersion TEXT');
       await d.execute(
           'ALTER TABLE user_settings ADD COLUMN socialLimitMinutes INTEGER');
     }

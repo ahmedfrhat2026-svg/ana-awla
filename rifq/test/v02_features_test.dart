@@ -10,8 +10,7 @@ void main() {
     final now = DateTime(2026, 7, 21, 9);
 
     test('أول جدولة لا تُحسب تجاهلًا', () {
-      const rule =
-          NotificationRule(category: NotificationCategory.studyStart);
+      const rule = NotificationRule(category: NotificationCategory.studyStart);
       final updated = engine.accountOnSchedule(rule, now);
       expect(updated.ignoredCount, 0);
       expect(updated.lastTriggeredAt, now);

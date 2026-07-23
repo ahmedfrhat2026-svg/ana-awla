@@ -61,8 +61,8 @@ class _IntentionalEntryScreenState
     final opened = await ref.read(instagramLauncherProvider).open();
     if (!mounted) return;
     if (!opened) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('مقدرتش أفتح إنستجرام')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('مقدرتش أفتح إنستجرام')));
     } else {
       context.go('/');
     }
@@ -96,7 +96,8 @@ class _IntentionalEntryScreenState
             title: 'المدة',
             child: ChoiceChips(
               options: const ['5 دقائق', '10 دقائق', '15 دقيقة', '20 دقيقة'],
-              selected: '$_minutes دقائق'.replaceFirst('15 دقائق', '15 دقيقة')
+              selected: '$_minutes دقائق'
+                  .replaceFirst('15 دقائق', '15 دقيقة')
                   .replaceFirst('20 دقائق', '20 دقيقة'),
               onSelected: (v) => setState(() {
                 _minutes = int.parse(v.split(' ').first);
@@ -109,8 +110,7 @@ class _IntentionalEntryScreenState
             label: const Text('افتح إنستجرام'),
             onPressed: _intention == null ? null : _enter,
           ),
-          const GentleFooter(
-              text: 'هفكّرك بعد المدة: أخدت اللي دخلت عشانه؟'),
+          const GentleFooter(text: 'هفكّرك بعد المدة: أخدت اللي دخلت عشانه؟'),
         ],
       ),
     );
@@ -138,7 +138,10 @@ class _QuranGateSheetState extends State<_QuranGateSheet> {
     super.initState();
     final all = gateAyat;
     final start = DateTime.now().day % all.length;
-    _ayat = [for (var i = 0; i < 3 && i < all.length; i++) all[(start + i) % all.length]];
+    _ayat = [
+      for (var i = 0; i < 3 && i < all.length; i++)
+        all[(start + i) % all.length]
+    ];
     _timer = Timer.periodic(const Duration(seconds: 1), (t) {
       setState(() => _remaining--);
       if (_remaining <= 0) t.cancel();
@@ -183,9 +186,8 @@ class _QuranGateSheetState extends State<_QuranGateSheet> {
                 ),
               ),
             FilledButton(
-              onPressed: _remaining <= 0
-                  ? () => Navigator.pop(context, true)
-                  : null,
+              onPressed:
+                  _remaining <= 0 ? () => Navigator.pop(context, true) : null,
               child: Text(_remaining <= 0
                   ? 'قرأت — كمّل بنيّة'
                   : 'اقرأ على مهلك… ($_remaining)'),

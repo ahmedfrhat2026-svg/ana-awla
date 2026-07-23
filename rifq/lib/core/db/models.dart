@@ -132,8 +132,9 @@ class UserSettings {
         quietHoursStart: quietHoursStart ?? this.quietHoursStart,
         quietHoursEnd: quietHoursEnd ?? this.quietHoursEnd,
         onboardingDone: onboardingDone ?? this.onboardingDone,
-        fatigueModeUntil:
-            clearFatigueMode ? null : (fatigueModeUntil ?? this.fatigueModeUntil),
+        fatigueModeUntil: clearFatigueMode
+            ? null
+            : (fatigueModeUntil ?? this.fatigueModeUntil),
         goals: goals ?? this.goals,
         lastSeenVersion: lastSeenVersion ?? this.lastSeenVersion,
         socialLimitMinutes: socialLimitMinutes ?? this.socialLimitMinutes,
@@ -701,7 +702,8 @@ class NotificationRule {
         preferredHour: m['preferredHour'] as int? ?? 9,
         preferredMinute: m['preferredMinute'] as int? ?? 0,
         ignoredCount: m['ignoredCount'] as int? ?? 0,
-        lastTriggeredAt: DateTime.tryParse(m['lastTriggeredAt'] as String? ?? ''),
+        lastTriggeredAt:
+            DateTime.tryParse(m['lastTriggeredAt'] as String? ?? ''),
         lastEngagedAt: DateTime.tryParse(m['lastEngagedAt'] as String? ?? ''),
       );
 }

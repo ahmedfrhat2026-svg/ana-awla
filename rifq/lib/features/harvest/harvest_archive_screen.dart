@@ -23,10 +23,8 @@ class _HarvestArchiveScreenState extends ConsumerState<HarvestArchiveScreen> {
 
   Future<(List<SmallWin>, List<Reflection>)> _load() async {
     final now = DateTime.now();
-    final from = now
-        .subtract(Duration(days: _days))
-        .toIso8601String()
-        .substring(0, 10);
+    final from =
+        now.subtract(Duration(days: _days)).toIso8601String().substring(0, 10);
     final to = now.toIso8601String().substring(0, 10);
     final wins = await ref.read(winsRepoProvider).between(from, to);
     final reflections =
@@ -68,12 +66,10 @@ class _HarvestArchiveScreenState extends ConsumerState<HarvestArchiveScreen> {
                     ),
                   );
                 }
-                final lessons = reflections
-                    .where((r) => r.learned.isNotEmpty)
-                    .toList();
-                final gratitudes = reflections
-                    .where((r) => r.gratitude.isNotEmpty)
-                    .toList();
+                final lessons =
+                    reflections.where((r) => r.learned.isNotEmpty).toList();
+                final gratitudes =
+                    reflections.where((r) => r.gratitude.isNotEmpty).toList();
                 return ListView(
                   padding: const EdgeInsets.all(20),
                   children: [
@@ -96,14 +92,12 @@ class _HarvestArchiveScreenState extends ConsumerState<HarvestArchiveScreen> {
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 10),
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
                                       children: [
                                         Icon(
-                                          w.privacyLevel ==
-                                                  PrivacyLevel.private
+                                          w.privacyLevel == PrivacyLevel.private
                                               ? Icons.lock_outline
                                               : Icons.eco_outlined,
                                           size: 16,
@@ -127,8 +121,7 @@ class _HarvestArchiveScreenState extends ConsumerState<HarvestArchiveScreen> {
                                     if (w.imagePath != null &&
                                         File(w.imagePath!).existsSync())
                                       Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 6),
+                                        padding: const EdgeInsets.only(top: 6),
                                         child: ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(12),
@@ -174,8 +167,7 @@ class _HarvestArchiveScreenState extends ConsumerState<HarvestArchiveScreen> {
                         ),
                       ),
                     if (reflections.any((r) =>
-                        r.voicePath != null &&
-                        File(r.voicePath!).existsSync()))
+                        r.voicePath != null && File(r.voicePath!).existsSync()))
                       SectionCard(
                         title: 'تسجيلاتك الصوتية',
                         child: Column(

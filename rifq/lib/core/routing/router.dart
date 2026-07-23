@@ -36,7 +36,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/compass', builder: (_, __) => const CompassHubScreen()),
       GoRoute(
           path: '/sanctuary', builder: (_, __) => const SanctuaryHubScreen()),
-      GoRoute(path: '/onboarding', builder: (_, __) => const OnboardingScreen()),
+      GoRoute(
+          path: '/onboarding', builder: (_, __) => const OnboardingScreen()),
       GoRoute(path: '/reset', builder: (_, __) => const ResetFlowScreen()),
       GoRoute(path: '/focus', builder: (_, __) => const FocusSetupScreen()),
       GoRoute(
@@ -58,7 +59,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/harvest/archive',
         builder: (_, __) => const HarvestArchiveScreen(),
       ),
-      GoRoute(path: '/creator', builder: (_, __) => const CreatorStudioScreen()),
+      GoRoute(
+          path: '/creator', builder: (_, __) => const CreatorStudioScreen()),
       GoRoute(
         path: '/creator/preview',
         builder: (_, state) =>

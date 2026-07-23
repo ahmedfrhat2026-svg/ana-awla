@@ -104,8 +104,8 @@ void main() {
         category: WinCategory.study,
         privacyLevel: PrivacyLevel.public,
       );
-      expect(gate.canShare(w.copyWith(privacyLevel: PrivacyLevel.public)),
-          isTrue);
+      expect(
+          gate.canShare(w.copyWith(privacyLevel: PrivacyLevel.public)), isTrue);
     });
 
     test('العنصر الحساس يُشارك فقط بعد اختيار صريح', () {
@@ -120,8 +120,8 @@ void main() {
     });
 
     test('قرار keepPrivate يحفظ المسودة خاصة', () {
-      final draft = engine.build(
-          ContentFormat.caption, ContentInput(wins: [win()]));
+      final draft =
+          engine.build(ContentFormat.caption, ContentInput(wins: [win()]));
       final result = gate.apply(draft, GateDecision.keepPrivate);
       expect(result.privacyLevel, PrivacyLevel.private);
       expect(result.status, DraftStatus.keptPrivate);

@@ -14,8 +14,7 @@ class StudyArchiveScreen extends ConsumerStatefulWidget {
   const StudyArchiveScreen({super.key});
 
   @override
-  ConsumerState<StudyArchiveScreen> createState() =>
-      _StudyArchiveScreenState();
+  ConsumerState<StudyArchiveScreen> createState() => _StudyArchiveScreenState();
 }
 
 class _StudyArchiveScreenState extends ConsumerState<StudyArchiveScreen> {
@@ -59,8 +58,8 @@ class _StudyArchiveScreenState extends ConsumerState<StudyArchiveScreen> {
                 if (withQuestions.isNotEmpty)
                   FilledButton.icon(
                     icon: const Icon(Icons.quiz_outlined),
-                    label: Text(
-                        'راجع أسئلتك المتوقعة (${withQuestions.length})'),
+                    label:
+                        Text('راجع أسئلتك المتوقعة (${withQuestions.length})'),
                     onPressed: () => Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) =>
@@ -86,17 +85,15 @@ class _SessionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final date = session.startedAt;
-    final dateLabel = date == null
-        ? ''
-        : '${date.year}/${date.month}/${date.day}';
+    final dateLabel =
+        date == null ? '' : '${date.year}/${date.month}/${date.day}';
     return SectionCard(
       title: '${session.subject} — ${session.actualMinutes} دقيقة'
           '${dateLabel.isEmpty ? '' : ' ($dateLabel)'}',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (session.tinyStep.isNotEmpty)
-            Text('البداية: ${session.tinyStep}'),
+          if (session.tinyStep.isNotEmpty) Text('البداية: ${session.tinyStep}'),
           if (session.retrievalAnswer.isNotEmpty) ...[
             const SizedBox(height: 6),
             Text('اللي فهمته: ${session.retrievalAnswer}'),
@@ -104,8 +101,7 @@ class _SessionCard extends StatelessWidget {
           if (session.unclearPoint.isNotEmpty) ...[
             const SizedBox(height: 6),
             Text('لسه مش واضح: ${session.unclearPoint}',
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary)),
+                style: TextStyle(color: Theme.of(context).colorScheme.primary)),
           ],
           if (session.examQuestion.isNotEmpty) ...[
             const SizedBox(height: 6),
@@ -158,8 +154,7 @@ class _QuestionReviewScreenState extends State<_QuestionReviewScreen> {
       body: ListView(
         padding: const EdgeInsets.all(24),
         children: [
-          Text(session.subject,
-              style: Theme.of(context).textTheme.bodyMedium),
+          Text(session.subject, style: Theme.of(context).textTheme.bodyMedium),
           const SizedBox(height: 8),
           SectionCard(
             title: 'السؤال اللي توقعته',

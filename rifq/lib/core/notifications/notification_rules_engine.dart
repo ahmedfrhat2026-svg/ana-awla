@@ -30,8 +30,8 @@ class NotificationRulesEngine {
   }) {
     final selected = rules
         .where((r) => r.enabled)
-        .where((r) => !isQuietHour(r.preferredHour,
-            start: quietStart, end: quietEnd))
+        .where((r) =>
+            !isQuietHour(r.preferredHour, start: quietStart, end: quietEnd))
         .where((r) => !r.reducedFrequency || day.day.isEven)
         .toList()
       ..sort((a, b) => (a.preferredHour * 60 + a.preferredMinute)

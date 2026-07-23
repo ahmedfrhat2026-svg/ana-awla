@@ -53,11 +53,10 @@ class UsageMonitorScreen extends ConsumerWidget {
                 );
               }
               return usageAsync.when(
-                loading: () =>
-                    const Center(child: CircularProgressIndicator()),
+                loading: () => const Center(child: CircularProgressIndicator()),
                 error: (_, __) => const Text('مش قادر أقرأ الاستخدام دلوقتي.'),
-                data: (minutes) =>
-                    _UsageView(minutes: minutes ?? 0, settings: settings, ref: ref),
+                data: (minutes) => _UsageView(
+                    minutes: minutes ?? 0, settings: settings, ref: ref),
               );
             },
           ),

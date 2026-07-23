@@ -78,8 +78,8 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
               File(widget.draft.imagePath!).existsSync())
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.file(File(widget.draft.imagePath!), height: 200,
-                  fit: BoxFit.cover),
+              child: Image.file(File(widget.draft.imagePath!),
+                  height: 200, fit: BoxFit.cover),
             ),
           const SizedBox(height: 12),
           TextField(
@@ -131,8 +131,7 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
                   icon: const Icon(Icons.copy),
                   label: const Text('نسخ النص'),
                   onPressed: () async {
-                    await Clipboard.setData(
-                        ClipboardData(text: _finalText));
+                    await Clipboard.setData(ClipboardData(text: _finalText));
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('اتنسخ ✓')));

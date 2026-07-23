@@ -57,9 +57,8 @@ class _BreathingCircleState extends State<BreathingCircle>
     _inhaling = inhale;
     _controller.duration =
         Duration(seconds: inhale ? inhaleSeconds : exhaleSeconds);
-    final future = inhale
-        ? _controller.forward(from: 0)
-        : _controller.reverse(from: 1);
+    final future =
+        inhale ? _controller.forward(from: 0) : _controller.reverse(from: 1);
     future.whenComplete(() {
       if (mounted && _elapsed < widget.totalSeconds) {
         setState(() => _startPhase(inhale: !inhale));

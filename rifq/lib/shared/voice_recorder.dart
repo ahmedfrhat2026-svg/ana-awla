@@ -50,7 +50,8 @@ class _VoiceRecorderState extends State<VoiceRecorder> {
     if (!await _recorder.hasPermission()) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('من غير إذن المايك مفيش تسجيل — وده اختيارك تمامًا')));
+            content:
+                Text('من غير إذن المايك مفيش تسجيل — وده اختيارك تمامًا')));
       }
       return;
     }
@@ -128,8 +129,11 @@ class _VoiceRecorderState extends State<VoiceRecorder> {
         children: [
           IconButton(
             tooltip: _playing ? 'إيقاف' : 'اسمع تسجيلك',
-            icon: Icon(_playing ? Icons.stop_circle_outlined
-                : Icons.play_circle_outlined, size: 32),
+            icon: Icon(
+                _playing
+                    ? Icons.stop_circle_outlined
+                    : Icons.play_circle_outlined,
+                size: 32),
             onPressed: _togglePlay,
           ),
           const Text('تسجيلك محفوظ ✓'),

@@ -195,8 +195,7 @@ class _CreatorStudioScreenState extends ConsumerState<CreatorStudioScreen> {
         options: _formatLabels.values.toList(),
         selected: _formatLabels[_format],
         onSelected: (v) => setState(() {
-          _format =
-              _formatLabels.entries.firstWhere((e) => e.value == v).key;
+          _format = _formatLabels.entries.firstWhere((e) => e.value == v).key;
         }),
       );
 }
@@ -234,8 +233,7 @@ class _IntentionGateSheet extends StatelessWidget {
             ],
             const SizedBox(height: 20),
             FilledButton(
-              onPressed: () =>
-                  Navigator.pop(context, GateDecision.keepPrivate),
+              onPressed: () => Navigator.pop(context, GateDecision.keepPrivate),
               child: const Text('احتفظ به خاصًا'),
             ),
             const SizedBox(height: 8),
@@ -246,8 +244,7 @@ class _IntentionGateSheet extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             OutlinedButton(
-              onPressed: () =>
-                  Navigator.pop(context, GateDecision.sharePublic),
+              onPressed: () => Navigator.pop(context, GateDecision.sharePublic),
               child: const Text('أنشئ نسخة عامة'),
             ),
             const SizedBox(height: 8),

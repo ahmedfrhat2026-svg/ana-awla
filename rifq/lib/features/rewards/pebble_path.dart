@@ -43,9 +43,8 @@ class PebblePathLogic {
 final pebbleCountProvider = FutureProvider.autoDispose<int>((ref) async {
   final focus = await ref.watch(focusRepoProvider).recent(limit: 1000);
   final resets = await ref.watch(resetRepoProvider).recent(limit: 1000);
-  final wins = await ref
-      .watch(winsRepoProvider)
-      .between('2000-01-01', '2100-01-01');
+  final wins =
+      await ref.watch(winsRepoProvider).between('2000-01-01', '2100-01-01');
   final completedResets = resets.where((r) => r.completed).length;
   return focus.length + completedResets + wins.length;
 });

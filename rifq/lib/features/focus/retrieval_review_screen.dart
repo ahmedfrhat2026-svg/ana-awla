@@ -113,8 +113,7 @@ class _RetrievalReviewScreenState extends ConsumerState<RetrievalReviewScreen> {
                       child: OutlinedButton.icon(
                         icon: const Icon(Icons.photo_camera_outlined),
                         label: const Text('كاميرا'),
-                        onPressed: () =>
-                            _pickNotesPhoto(ImageSource.camera),
+                        onPressed: () => _pickNotesPhoto(ImageSource.camera),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -122,8 +121,7 @@ class _RetrievalReviewScreenState extends ConsumerState<RetrievalReviewScreen> {
                       child: OutlinedButton.icon(
                         icon: const Icon(Icons.image_outlined),
                         label: const Text('المعرض'),
-                        onPressed: () =>
-                            _pickNotesPhoto(ImageSource.gallery),
+                        onPressed: () => _pickNotesPhoto(ImageSource.gallery),
                       ),
                     ),
                   ],

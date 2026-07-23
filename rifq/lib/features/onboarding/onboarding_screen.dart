@@ -40,8 +40,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 
   Future<void> _finish() async {
-    final settings = ref.read(settingsProvider).valueOrNull ??
-        const UserSettings();
+    final settings =
+        ref.read(settingsProvider).valueOrNull ?? const UserSettings();
     await ref.read(settingsProvider.notifier).save(settings.copyWith(
           onboardingDone: true,
           companionName: _companionName.text.trim().isEmpty
@@ -59,8 +59,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       _finish();
     } else {
       _pageController.nextPage(
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.easeInOut);
+          duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
     }
   }
 
@@ -161,8 +160,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       ]);
 
   Widget _page3() => _wrap([
-        Text('اختار رفيقك',
-            style: Theme.of(context).textTheme.headlineSmall),
+        Text('اختار رفيقك', style: Theme.of(context).textTheme.headlineSmall),
         const SizedBox(height: 20),
         for (final entry in SettingsScreen.personaLabels.entries)
           Card(
@@ -194,7 +192,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         Text('التنبيهات على مزاجك',
             style: Theme.of(context).textTheme.headlineSmall),
         const SizedBox(height: 8),
-        Text('قليلة، هادئة، وفيها فعل صغير — مش مجرد اقتباس. '
+        Text(
+            'قليلة، هادئة، وفيها فعل صغير — مش مجرد اقتباس. '
             'ولو اتجاهلتها هتقل لوحدها بدل ما تزن عليك.',
             style: Theme.of(context).textTheme.bodyLarge),
         const SizedBox(height: 20),
@@ -206,8 +205,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             max: 5,
             divisions: 5,
             label: '$_notificationsPerDay',
-            onChanged: (v) =>
-                setState(() => _notificationsPerDay = v.round()),
+            onChanged: (v) => setState(() => _notificationsPerDay = v.round()),
           ),
         ),
         Text('مش هنطلب إذن الإشعارات دلوقتي — لما تيجي تجدول أول تذكير.',
@@ -215,8 +213,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       ]);
 
   Widget _page5() => _wrap([
-        Text('خصوصيتك أولًا',
-            style: Theme.of(context).textTheme.headlineSmall),
+        Text('خصوصيتك أولًا', style: Theme.of(context).textTheme.headlineSmall),
         const SizedBox(height: 20),
         const SectionCard(
           child: Text(

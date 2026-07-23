@@ -86,7 +86,8 @@ class _FatigueScreenState extends ConsumerState<FatigueScreen> {
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          Text('أنا في مرحلة الفتور — والمطلوب الحفاظ على الخيط، '
+          Text(
+              'أنا في مرحلة الفتور — والمطلوب الحفاظ على الخيط، '
               'مش تحقيق إنجاز كبير.',
               style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 16),
@@ -97,9 +98,7 @@ class _FatigueScreenState extends ConsumerState<FatigueScreen> {
             options: _kindLabels.values.toList(),
             selected: _kindLabels[_kind],
             onSelected: (v) => setState(() {
-              _kind = _kindLabels.entries
-                  .firstWhere((e) => e.value == v)
-                  .key;
+              _kind = _kindLabels.entries.firstWhere((e) => e.value == v).key;
             }),
           ),
           if (_kind != null) ...[

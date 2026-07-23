@@ -110,8 +110,7 @@ class FakeReflectionRepository implements ReflectionRepository {
   Future<List<Reflection>> between(String fromDate, String toDate) async =>
       reflections
           .where((r) =>
-              r.date.compareTo(fromDate) >= 0 &&
-              r.date.compareTo(toDate) <= 0)
+              r.date.compareTo(fromDate) >= 0 && r.date.compareTo(toDate) <= 0)
           .toList();
 }
 
@@ -161,9 +160,7 @@ class FakeNotificationRulesRepository implements NotificationRulesRepository {
         preferredHour: 8,
         preferredMinute: 30),
     const NotificationRule(
-        id: 2,
-        category: NotificationCategory.studyStart,
-        preferredHour: 16),
+        id: 2, category: NotificationCategory.studyStart, preferredHour: 16),
     const NotificationRule(
         id: 3,
         category: NotificationCategory.eveningHarvest,

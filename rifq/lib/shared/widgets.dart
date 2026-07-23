@@ -45,7 +45,8 @@ class BigActionButton extends StatelessWidget {
                               .textTheme
                               .bodyMedium
                               ?.copyWith(
-                                  color: scheme.onSurface.withValues(alpha: 0.7))),
+                                  color:
+                                      scheme.onSurface.withValues(alpha: 0.7))),
                     ],
                   ),
                 ),
@@ -154,7 +155,10 @@ class GentleFooter extends StatelessWidget {
           text,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6)),
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.6)),
         ),
       ),
     );

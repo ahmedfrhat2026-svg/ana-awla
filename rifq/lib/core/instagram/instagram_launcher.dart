@@ -67,8 +67,8 @@ class MethodChannelUsageStats implements UsageStatsGateway {
   @override
   Future<int?> usageTodayMinutes(String packageName) async {
     try {
-      final minutes = await _channel.invokeMethod<int>(
-          'usageTodayMinutes', {'package': packageName});
+      final minutes = await _channel
+          .invokeMethod<int>('usageTodayMinutes', {'package': packageName});
       // القناة تُعيد -1 عند غياب الصلاحية.
       if (minutes == null || minutes < 0) return null;
       return minutes;

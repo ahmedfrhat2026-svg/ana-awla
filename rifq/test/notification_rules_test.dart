@@ -97,10 +97,7 @@ void main() {
     test('لا تنبيهين خلال أقل من 90 دقيقة', () {
       final rules = [
         rule(category: NotificationCategory.morningGrounding, hour: 9),
-        rule(
-            category: NotificationCategory.studyStart,
-            hour: 9,
-            minute: 30),
+        rule(category: NotificationCategory.studyStart, hour: 9, minute: 30),
         rule(category: NotificationCategory.eveningHarvest, hour: 12),
       ];
       final selected = engine.selectForDay(rules,
@@ -130,8 +127,7 @@ void main() {
       final day = DateTime(2026, 7, 21);
       expect(engine.pickText(texts, day), engine.pickText(texts, day));
       for (var i = 0; i < 10; i++) {
-        final text =
-            engine.pickText(texts, day.add(Duration(days: i)));
+        final text = engine.pickText(texts, day.add(Duration(days: i)));
         expect(texts.contains(text), isTrue);
       }
     });

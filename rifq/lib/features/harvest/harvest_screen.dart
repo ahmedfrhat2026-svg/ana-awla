@@ -54,8 +54,7 @@ class _HarvestScreenState extends ConsumerState<HarvestScreen> {
   }
 
   Future<void> _pickImage() async {
-    final picked =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (picked != null) setState(() => _imagePath = picked.path);
   }
 
@@ -102,8 +101,7 @@ class _HarvestScreenState extends ConsumerState<HarvestScreen> {
   }
 
   Future<void> _saveReflection() async {
-    await _checkSafety(
-        '${_learned.text} ${_gratitude.text} ${_release.text}');
+    await _checkSafety('${_learned.text} ${_gratitude.text} ${_release.text}');
     final today = DateTime.now().toIso8601String().substring(0, 10);
     await ref.read(reflectionRepoProvider).add(Reflection(
           date: today,
@@ -197,12 +195,10 @@ class _HarvestScreenState extends ConsumerState<HarvestScreen> {
               children: [
                 CalmTextField(controller: _learned, hint: 'حاجة اتعلمتها'),
                 const SizedBox(height: 10),
-                CalmTextField(
-                    controller: _gratitude, hint: 'حاجة شاكر عليها'),
+                CalmTextField(controller: _gratitude, hint: 'حاجة شاكر عليها'),
                 const SizedBox(height: 10),
                 CalmTextField(
-                    controller: _release,
-                    hint: 'حاجة هسيبها ومش هشيلها لبكرة'),
+                    controller: _release, hint: 'حاجة هسيبها ومش هشيلها لبكرة'),
                 const SizedBox(height: 10),
                 VoiceRecorder(onChanged: (p) => _voicePath = p),
                 const SizedBox(height: 10),
@@ -216,8 +212,7 @@ class _HarvestScreenState extends ConsumerState<HarvestScreen> {
                         max: 5,
                         divisions: 4,
                         label: '$_mood',
-                        onChanged: (v) =>
-                            setState(() => _mood = v.round()),
+                        onChanged: (v) => setState(() => _mood = v.round()),
                       ),
                     ),
                   ],

@@ -87,11 +87,13 @@ class _FocusSetupScreenState extends ConsumerState<FocusSetupScreen> {
           const SizedBox(height: 16),
           CalmTextField(controller: _subject, hint: 'المادة', maxLines: 1),
           const SizedBox(height: 12),
-          CalmTextField(controller: _task, hint: 'المهمة (اختياري)', maxLines: 1),
+          CalmTextField(
+              controller: _task, hint: 'المهمة (اختياري)', maxLines: 1),
           const SizedBox(height: 12),
           CalmTextField(
               controller: _tinyStep,
-              hint: 'أصغر خطوة (مثال: ${_tinyExamples[DateTime.now().day % _tinyExamples.length]})',
+              hint:
+                  'أصغر خطوة (مثال: ${_tinyExamples[DateTime.now().day % _tinyExamples.length]})',
               maxLines: 1),
           const SizedBox(height: 12),
           CalmTextField(
@@ -130,7 +132,9 @@ class _FocusSetupScreenState extends ConsumerState<FocusSetupScreen> {
                   style: Theme.of(context).textTheme.titleMedium),
             ),
           const SizedBox(height: 12),
-          FilledButton(onPressed: _start, child: const Text('ابدأ — عشر دقايق وناخد القرار')),
+          FilledButton(
+              onPressed: _start,
+              child: const Text('ابدأ — عشر دقايق وناخد القرار')),
           const GentleFooter(
               text: 'قرار الاستمرار بيتاخد بعد ما تبدأ، مش قبلها.'),
         ],

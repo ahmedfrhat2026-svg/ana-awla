@@ -50,7 +50,11 @@ class _RifqAppState extends ConsumerState<RifqApp> {
             _ => ThemeMode.system,
           },
           locale: const Locale('ar', 'EG'),
-          supportedLocales: const [Locale('ar', 'EG'), Locale('ar'), Locale('en')],
+          supportedLocales: const [
+            Locale('ar', 'EG'),
+            Locale('ar'),
+            Locale('en')
+          ],
           localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,

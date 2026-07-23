@@ -44,8 +44,8 @@ final usagePermissionProvider = FutureProvider.autoDispose<bool>(
     (ref) => ref.watch(usageStatsProvider).hasPermission);
 
 /// دقائق إنستجرام اليوم — null لو الصلاحية غير ممنوحة.
-final instagramUsageProvider = FutureProvider.autoDispose<int?>((ref) =>
-    ref.watch(usageStatsProvider).usageTodayMinutes(instagramPackage));
+final instagramUsageProvider = FutureProvider.autoDispose<int?>(
+    (ref) => ref.watch(usageStatsProvider).usageTodayMinutes(instagramPackage));
 
 /// الإعدادات الحالية — تُحمَّل مرة وتُحدَّث عند أي تغيير.
 final settingsProvider =
@@ -110,8 +110,7 @@ class NotificationCenter {
     final rules = await repo.all();
     final accounted = <NotificationRule>[];
     for (final rule in rules) {
-      final updated =
-          rule.enabled ? engine.accountOnSchedule(rule, now) : rule;
+      final updated = rule.enabled ? engine.accountOnSchedule(rule, now) : rule;
       if (updated.ignoredCount != rule.ignoredCount ||
           updated.lastTriggeredAt != rule.lastTriggeredAt) {
         await repo.update(updated);

@@ -48,8 +48,8 @@ class _NotificationSettingsScreenState
     if (!granted) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content:
-                Text('من غير إذن الإشعارات هيشتغل التطبيق عادي — بس من غير تذكير')));
+            content: Text(
+                'من غير إذن الإشعارات هيشتغل التطبيق عادي — بس من غير تذكير')));
       }
       return;
     }
@@ -82,8 +82,8 @@ class _NotificationSettingsScreenState
               max: 5,
               divisions: 5,
               label: '${settings.notificationsPerDay}',
-              onChanged: (v) => notifier.save(
-                  settings.copyWith(notificationsPerDay: v.round())),
+              onChanged: (v) => notifier
+                  .save(settings.copyWith(notificationsPerDay: v.round())),
             ),
           ),
           SectionCard(
@@ -134,8 +134,7 @@ class _NotificationSettingsScreenState
                   final picked = await showTimePicker(
                     context: context,
                     initialTime: TimeOfDay(
-                        hour: rule.preferredHour,
-                        minute: rule.preferredMinute),
+                        hour: rule.preferredHour, minute: rule.preferredMinute),
                   );
                   if (picked == null) return;
                   await ref.read(notificationRulesRepoProvider).update(
@@ -148,9 +147,7 @@ class _NotificationSettingsScreenState
               value: rule.enabled,
               onChanged: (v) async {
                 final updated = rule.copyWith(enabled: v);
-                await ref
-                    .read(notificationRulesRepoProvider)
-                    .update(updated);
+                await ref.read(notificationRulesRepoProvider).update(updated);
                 await _load();
               },
             ),
@@ -160,7 +157,8 @@ class _NotificationSettingsScreenState
             child: const Text('احفظ وجدوِل'),
           ),
           const GentleFooter(
-            text: 'العبادة لا تتحول لنقاط، ومفيش مقارنة بحد — رِفْق رفيق مش رقيب.',
+            text:
+                'العبادة لا تتحول لنقاط، ومفيش مقارنة بحد — رِفْق رفيق مش رقيب.',
           ),
         ],
       ),

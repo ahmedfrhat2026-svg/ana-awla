@@ -11,7 +11,8 @@ import 'notification_rules_engine.dart';
 /// وتنفيذ وهمي للاختبارات في مجلد test.
 abstract interface class NotificationScheduler {
   Future<bool> requestPermissionIfNeeded();
-  Future<void> scheduleDaily(UserSettings settings, List<NotificationRule> rules);
+  Future<void> scheduleDaily(
+      UserSettings settings, List<NotificationRule> rules);
   Future<void> scheduleIntentReturn(int minutes, String companionName);
   Future<void> cancelAll();
 
@@ -79,7 +80,8 @@ class LocalNotificationScheduler implements NotificationScheduler {
 
     final now = DateTime.now();
     // في وضع الفتور: تنبيه واحد رحيم يوميًا فقط.
-    final maxPerDay = settings.fatigueModeActive ? 1 : settings.notificationsPerDay;
+    final maxPerDay =
+        settings.fatigueModeActive ? 1 : settings.notificationsPerDay;
     final selected = _engine.selectForDay(
       rules,
       maxPerDay: maxPerDay,
@@ -93,8 +95,8 @@ class LocalNotificationScheduler implements NotificationScheduler {
       final text = settings.fatigueModeActive
           ? _engine.pickText(fatigueGentleTexts, now)
           : _engine.pickText(_textsFor(rule.category), now);
-      var when = tz.TZDateTime.local(
-          now.year, now.month, now.day, rule.preferredHour, rule.preferredMinute);
+      var when = tz.TZDateTime.local(now.year, now.month, now.day,
+          rule.preferredHour, rule.preferredMinute);
       if (when.isBefore(tz.TZDateTime.now(tz.local))) {
         when = when.add(const Duration(days: 1));
       }

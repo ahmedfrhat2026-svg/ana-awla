@@ -106,8 +106,7 @@ class WeeklyReviewScreen extends ConsumerWidget {
     // اقتراح واحد فقط — أبسط عنق زجاجة ملحوظ.
     String suggestion;
     if (focus.isEmpty) {
-      suggestion =
-          'جرّب جلسة «بداية ثقيلة» واحدة (10 دقايق) في أهدأ وقت عندك.';
+      suggestion = 'جرّب جلسة «بداية ثقيلة» واحدة (10 دقايق) في أهدأ وقت عندك.';
     } else if (weekResets > focus.length) {
       suggestion =
           'التوهان أكتر من الجلسات — خلي الموبايل خارج مجال النظر وقت أول جلسة بس.';
@@ -120,8 +119,7 @@ class WeeklyReviewScreen extends ConsumerWidget {
 
     return _WeekData(
       focusCount: focus.length,
-      focusMinutes:
-          focus.fold<int>(0, (sum, s) => sum + s.actualMinutes),
+      focusMinutes: focus.fold<int>(0, (sum, s) => sum + s.actualMinutes),
       resetCount: weekResets,
       wins: wins,
       privateDrafts: privateDrafts,
