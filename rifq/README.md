@@ -20,10 +20,34 @@
 
 ---
 
+## الأنظمة الثلاثة
+
+من نسخة v0.4.0، رِفْق بقى متبني حوالين **ثلاث مساحات متصلة**، بتظهر على شاشة رئيسية جديدة: حديقة حيّة (Living Garden) — مشهد مرسوم بالكامل بـ `CustomPainter` أصلي، مش صورة جاهزة: بركة ماء عاكسة (المرآة)، طريق حجارة (البوصلة)، وشجرة زيتون تحت مأوى (الملجأ)، مع إضاءة بتتغيّر حسب وقت اليوم، وحركة سكونية خفيفة جدًا بتتوقف تلقائيًا لما التطبيق يبقى في الخلفية أو لو المستخدم مفعّل "تقليل الحركة" (Reduced Motion). كل وجهة على الشاشة عندها تسمية عربية + تلميح، ومساحة لمس دلالية (Semantic tap target) لا تقل عن 48px.
+
+### 🪞 المرآة — تأمل ما عشته
+- **متحف العودة (Museum of Returning)**: كل جلسة عودة مكتملة بتتحول لحجر جنب مياه ساكنة، ووصفها جملة نوعية (مش رقم أو Score).
+- **أوثّق لحظتي** — حصاد اللحظة.
+- **حصاد رحلتك** — أرشيف أسبوعي/شهري.
+- **سكينة الأسبوع** — مراجعة أسبوعية نوعية.
+- **أرشيف المذاكرة**.
+
+### 🧭 البوصلة — اختر اتجاهك
+- **حديقة القيم (Value Garden)**: كل قيمة تختارها نبتة بتكبر من أفعال ذات معنى، وبترتاح (Rest) لما تُهمَل لكن **ما بتموتش ولا بتترّاجع أبدًا** — ملاحظة نوعية بدون أي نسب مئوية.
+- **غرفة القرار (Decision Room)**: سؤال واحد في كل شاشة — "اختيار أم هروب؟" — والمُخرَج تأمل، مش حُكم.
+- بالإضافة لـ: أذاكر، المؤثر الهادئ، وقتك على السوشيال، دخول إنستجرام بنية.
+
+### 🏡 الملجأ — افهم ما تحتاجه الآن
+- دخول خافت بسؤال واحد: **"ماذا يحدث داخلك الآن؟"** مع 8 مشاعر: مرهق، حزين، خائف، مشتت، زهقان، محبط، مجهد ذهنيًا، لا أعرف — وكل مشاعر عندها استجابة مختلفة قليلة الاحتكاك (تعب → راحة لا إنتاجية، حزن → دعم + ملاحظة صوتية، خوف → فصل الحقيقة عن التوقع، وهكذا)، خطوة واحدة ثم خروج للحياة.
+- **وضع الخلوة (Retreat Mode)**: اترك الموبايل وعيش، بتلميح زمني غير مخيف، وينتهي بسؤال "ماذا حدث خارج الهاتف؟".
+
+كل مساحة من التلاتة دي مبنية على مبدأ واحد: **"كل جلسة داخل رِفْق يجب أن تنتهي بفهم أو قرار أو خروج إلى الحياة. إن لم تفعل، فهي مجرد استهلاك رقمي بلغة هادئة."** ومن هنا: مفيش Feed لا نهائي، مفيش إعلانات، مفيش Leaderboard، مفيش Streaks ولا شعلات نار، ومفيش نبتة بتموت لو غبت — كل البيانات محليّة فقط، والتطبيق شغّال حتى من غير إنترنت.
+
+---
+
 ## المزايا المنفَّذة
 
-### الشاشة الرئيسية — 4 أبواب
-نقطة انطلاق بسيطة لأربع رحلات: العودة الهادئة، المذاكرة المركّزة، حصاد اليوم، صانع المحتوى.
+### الشاشة الرئيسية — الحديقة الحيّة + 3 محاور
+شاشة حديقة حيّة (Living Garden) بمشهد أصلي مرسوم (بركة/طريق/شجرة) بيوصلك للمرآة والبوصلة والملجأ، بالإضافة لقسم هادئ اسمه **"أدوات هادئة"** بيجمّع كل الأدوات الأصلية (العودة، التركيز، الحصاد، صانع المحتوى، الدخول الواعي...) في مكان واحد سهل الوصول.
 
 ### 🌙 "أنا تايه دلوقتي" — جلسة العودة الموجّهة
 - النظر بعيدًا 5 ثوانٍ.
@@ -71,6 +95,9 @@
 ### ⚙️ الإعدادات وصفحة الأمان
 جدولة التنبيهات، وصفحة أمان واضحة تقول: "ليس علاجًا"، بلا فتاوى وبلا تشخيصات.
 
+### 🎨 نظام التصميم المركزي (Design System)
+مكتبة تصميم موحّدة في `lib/design_system/`: ألوان مُرمَّزة (Tokenized) — عاجي دافئ للخلفية (`#F5F1E8`)، أخضر سيچ (`#708A72`)، أخضر غابة عميق (`#365646`)، طيني (Clay، `#C78668`)، رملي، ذهبي، ماء هادئ — بالإضافة لمقياس تباعد (Spacing scale)، أشكال عضوية (Organic shapes)، رموز حركة (Motion tokens)، وتايبوغرافيا مُعايَرة للعربي (خط Cairo، ارتفاع سطر سخي، عناوين بايرة عبر `FontVariation`). فيه كمان `RifqPalette` كـ `ThemeExtension` بيحمل ألوان الحديقة الدلالية، ثيمين (فاتح/داكن) بظلال خضراء ناعمة، مساعد لتفعيل "تقليل الحركة"، ومكوّنات مشتركة جاهزة: `RifqScaffold`, `RifqPageHeader`, `RifqOrganicSurface`, `RifqSection`, `RifqEmptyState`.
+
 ---
 
 ## لقطات الشاشة
@@ -79,9 +106,21 @@
 
 ---
 
-## تنزيل الـ APK من GitHub Actions
+## تنزيل الـ APK
 
-مفيش حاجة اسمها Release ثابت لسه — كل بناء بيتعمل تلقائي عند أي Push على `rifq/**`، أو ممكن تشغّله يدويًا. اتبع الخطوات دي بالظبط:
+### الأسهل: من صفحة Releases (v0.4.0)
+
+أحدث نسخة منشورة رسميًا هي **v0.4.0**، ومتاحة مباشرة كـ Release على GitHub:
+
+```
+https://github.com/ahmedfrhat2026-svg/ana-awla/releases/download/rifq-v0.4.0/app-arm64-v8a-release.apk
+```
+
+نزّل الملف على موبايلك مباشرة، فعّل "التثبيت من مصادر غير معروفة" لو طُلب منك، وثبّته (Sideload).
+
+### أو من GitHub Actions (أحدث بناء تلقائي)
+
+لو عايز آخر تعديل حتى لو لسه ماتعملوش Release رسمي، كل بناء بيتعمل تلقائي عند أي Push على `rifq/**`، أو ممكن تشغّله يدويًا. اتبع الخطوات دي بالظبط:
 
 1. افتح الريبو على GitHub، وادخل تبويب **Actions**.
 2. من قائمة الـ Workflows على الشمال، اختر **Build RIFQ APK**.
@@ -137,9 +176,10 @@ flutter analyze
 rifq/
 ├── lib/
 │   ├── main.dart
+│   ├── design_system/          # ألوان مُرمَّزة، تايبوغرافيا، مكوّنات مشتركة (RifqScaffold...)
 │   ├── core/
-│   │   ├── theme/            # Material 3 theme
-│   │   ├── db/                # sqflite: app_database, models, repositories
+│   │   ├── theme/            # Material 3 theme + RifqPalette ThemeExtension
+│   │   ├── db/                # sqflite: app_database (v4), models, repositories
 │   │   ├── notifications/     # NotificationScheduler + NotificationRulesEngine
 │   │   ├── content/           # ContentTemplateEngine + sacred_texts + seed_texts
 │   │   ├── instagram/         # InstagramLauncher + UsageStatsGateway (flag off)
@@ -148,7 +188,10 @@ rifq/
 │   │   └── providers.dart     # Riverpod providers (manual، بدون codegen)
 │   ├── features/
 │   │   ├── onboarding/
-│   │   ├── home/
+│   │   ├── home/               # الحديقة الحيّة (Living Garden) + أدوات هادئة
+│   │   ├── mirror/              # المرآة — متحف العودة، حصاد الرحلة، سكينة الأسبوع
+│   │   ├── compass/             # البوصلة — حديقة القيم، غرفة القرار
+│   │   ├── sanctuary/           # الملجأ — مسارات المشاعر، وضع الخلوة
 │   │   ├── reset/              # "أنا تايه دلوقتي"
 │   │   ├── focus/               # "افتح بس"
 │   │   ├── harvest/             # حصاد اليوم
@@ -158,7 +201,7 @@ rifq/
 │   │   ├── fatigue/             # وضع الفتور
 │   │   └── settings/
 │   └── shared/                  # Widgets مشتركة
-├── test/                         # 30 اختبار (unit + widget) + fakes.dart
+├── test/                         # 84 اختبار (unit + widget) + fakes.dart
 ├── android_overlay/              # AndroidManifest.xml + build.gradle.kts المخصّصة
 └── docs/
     ├── architecture.md
@@ -172,7 +215,11 @@ rifq/
 | الحالة | العنصر |
 |---|---|
 | ✅ تم | Onboarding (5 صفحات، بدون طلب أي صلاحية) |
-| ✅ تم | الشاشة الرئيسية (4 أبواب) |
+| ✅ تم | الشاشة الرئيسية — الحديقة الحيّة (Living Garden) + الأنظمة الثلاثة (المرآة، البوصلة، الملجأ) + "أدوات هادئة" |
+| ✅ تم | نظام التصميم المركزي `lib/design_system/` (ألوان مُرمَّزة، تايبوغرافيا عربية، مكوّنات مشتركة، ثيم فاتح/داكن) |
+| ✅ تم | المرآة: متحف العودة، أوثّق لحظتي، حصاد رحلتك، سكينة الأسبوع، أرشيف المذاكرة |
+| ✅ تم | البوصلة: حديقة القيم (قيم لا تموت ولا تتراجع)، غرفة القرار ("اختيار أم هروب؟") |
+| ✅ تم | الملجأ: مسارات المشاعر الثمانية بخطوة واحدة، وضع الخلوة |
 | ✅ تم | جلسة العودة الموجّهة الكاملة (نظر بعيد، تنفّس، ذكر/آية، سؤال، خطوة صغيرة) |
 | ✅ تم | جلسات التركيز (presets، implementation intention، مراجعة استرجاع) |
 | ✅ تم | حصاد اليوم + التأمل المسائي + فحص إيذاء النفس المحلي |
@@ -182,8 +229,12 @@ rifq/
 | ✅ تم | المراجعة الأسبوعية (لغة "ماذا لاحظت؟"، بدون Streaks) |
 | ✅ تم | وضع الفتور (3 أيام رحمة) |
 | ✅ تم | الإعدادات + جدولة التنبيهات + صفحة الأمان |
-| ✅ تم | 30 اختبار (unit + widget) و `flutter analyze` نظيف |
-| ✅ تم | بناء APK تلقائي عبر GitHub Actions (debug + release split-per-abi) |
+| ✅ تم | قاعدة البيانات schema v4 (جدول `life_value` جديد للبوصلة) |
+| ✅ تم | 84 اختبار (unit + widget) و `flutter analyze` نظيف |
+| ✅ تم | بناء APK تلقائي عبر GitHub Actions (debug + release split-per-abi) + Release رسمي v0.4.0 |
+| ❌ لسه لأ | Calm Day Designer |
+| ❌ لسه لأ | كبسولات الوقت (Time capsules) |
+| ❌ لسه لأ | نمو تلقائي لقيم البوصلة من أفعال التركيز/العودة (حاليًا النمو يدوي حسب الأفعال المسجَّلة) |
 | ❌ لسه لأ | الملاحظات الصوتية (Voice notes) |
 | ❌ لسه لأ | ضوضاء بيضاء (White noise audio) |
 | ❌ لسه لأ | تكامل UsageStatsManager الفعلي (الواجهة موجودة، الـ Feature Flag مقفول) |
@@ -215,17 +266,33 @@ RIFQ is a fully Arabic-first, RTL Android companion app that helps you step away
 
 No infinite feed, no ads, no leaderboards, no shame-inducing streak flames. All data stays local on your device, and the app works fully offline.
 
+## v0.4.0: three connected spaces
+
+As of v0.4.0, RIFQ is reorganized around **three connected spaces**, surfaced on a new living-garden home screen — an original `CustomPainter` scene (reflective pool, stone path, sheltered olive tree) with time-of-day light and barely-there ambient motion that pauses on background and under reduced-motion:
+
+- **المرآة (Mirror)** — reflect on what you've lived: Museum of Returning (each completed reset becomes a stone by still water, described in a qualitative sentence, never a score), moment harvesting, weekly/monthly journey archive, weekly qualitative review, study archive.
+- **البوصلة (Compass)** — choose your direction: Value Garden (each chosen value is a plant that grows from meaningful actions and rests but never dies or regresses when neglected — qualitative observation, no percentages), Decision Room (one question per screen, "choice or escape?", output is a reflection, not a verdict), plus focus sessions, the calm influencer tool, social-time awareness, and intentional Instagram entry.
+- **الملجأ (Sanctuary)** — understand what you need right now: a dim one-question entry ("what's happening inside you right now?") across 8 emotions, each with a different low-friction response, one step then exit to life; Retreat Mode (put the phone down and go live, ending with "what happened outside the phone?").
+
+Product principle: *"Every session inside RIFQ must end in understanding, a decision, or a return to life. If it doesn't, it's just digital consumption in a calm voice."* No infinite feed, no ads, no leaderboards, no streaks, no plant ever dies from being away, all data local-only, fully offline.
+
+A new centralized design system lives in `lib/design_system/`: tokenized colors, spacing, organic shapes, motion tokens, Arabic-tuned typography, a `RifqPalette` theme extension, light/dark themes, and shared components.
+
 ## Stack
 
-Flutter 3.44.7, Dart null-safety, Material 3, Riverpod (manual providers, no codegen), GoRouter, sqflite (chosen deliberately over Drift to avoid build_runner codegen — a proven pattern in this repo), flutter_local_notifications (inexact alarms only), timezone, share_plus, image_picker, url_launcher, permission_handler, intl.
+Flutter 3.44.7, Dart null-safety, Material 3, Riverpod (manual providers, no codegen), GoRouter, sqflite (chosen deliberately over Drift to avoid build_runner codegen — a proven pattern in this repo, now at schema v4), flutter_local_notifications (inexact alarms only), timezone, share_plus, image_picker, url_launcher, permission_handler, intl.
 
 ## Feature summary
 
-Onboarding, home (4 doors), guided reset flow ("أنا تايه دلوقتي" — look-away, breathing, verified dhikr/ayah, tiny action), focus sessions ("افتح بس" — presets, implementation intentions, retrieval practice), daily harvest (small wins with sensitive-by-default categories, evening reflection, local-only self-harm signal check), quiet content creator studio (deterministic templates, privacy gate, value check, Share Sheet), intentional Instagram entry, a considerate notification system (max 3/day, quiet hours, ignore-based frequency reduction), weekly review (no streaks), and a 3-day fatigue/compassion mode.
+Home (living-garden scene + the three spaces + a quiet "أدوات هادئة" tools section), onboarding, guided reset flow ("أنا تايه دلوقتي" — look-away, breathing, verified dhikr/ayah, tiny action), focus sessions ("افتح بس" — presets, implementation intentions, retrieval practice), daily harvest (small wins with sensitive-by-default categories, evening reflection, local-only self-harm signal check), quiet content creator studio (deterministic templates, privacy gate, value check, Share Sheet), intentional Instagram entry, a considerate notification system (max 3/day, quiet hours, ignore-based frequency reduction), weekly review (no streaks), and a 3-day fatigue/compassion mode. All prior features remain implemented and reachable.
 
 ## Getting the APK
 
-GitHub Actions → **Build RIFQ APK** workflow → latest successful run → **Artifacts** section → download **rifq-apk** → unzip → sideload `rifq-debug.apk` (quick) or the `arm64-v8a` release APK (recommended for most modern Android phones).
+Latest official release, **v0.4.0**: download directly from GitHub Releases —
+```
+https://github.com/ahmedfrhat2026-svg/ana-awla/releases/download/rifq-v0.4.0/app-arm64-v8a-release.apk
+```
+Or for the latest CI build: GitHub Actions → **Build RIFQ APK** workflow → latest successful run → **Artifacts** section → download **rifq-apk** → unzip → sideload `rifq-debug.apk` (quick) or the `arm64-v8a` release APK (recommended for most modern Android phones).
 
 ## Local build
 
@@ -240,13 +307,13 @@ Requires Android SDK configured (`flutter doctor` clean). See the Arabic section
 
 ## Tests
 
-30 passing tests (unit: template engine, privacy gate, notification rules engine, models roundtrip, seed content, safety check; widget: home, onboarding, fatigue). `flutter analyze` is clean.
+84 passing tests (unit + widget, including the new Mirror/Compass/Sanctuary logic and accessibility/large-text checks). `flutter analyze` is clean.
 
 ## Honest status
 
-Implemented: everything listed above, end to end, with local sqflite persistence and a working GitHub Actions build pipeline producing both debug and release (split-per-ABI) APKs.
+Implemented: everything listed above, end to end, with local sqflite persistence (schema v4) and a working GitHub Actions build pipeline producing both debug and release (split-per-ABI) APKs, plus an official v0.4.0 GitHub Release.
 
-Not implemented yet: voice notes, white noise audio, real UsageStatsManager integration (interface exists, feature flag off), auto-posting via the Instagram API (sharing is via the Android Share Sheet only), iOS, encrypted cloud sync, any LLM/AI-assisted text generation, wiring the notification-ignore counter to real OS-level notification tap callbacks (the counting logic exists and is tested, just not wired to the OS), and a richer per-category Friday harvest reminder scheduling UI (currently basic).
+Not implemented yet: Calm Day Designer, time capsules, auto-growth of Compass values from focus/reset actions (growth is currently driven by explicitly logged actions), voice notes, white noise audio, real UsageStatsManager integration (interface exists, feature flag off), auto-posting via the Instagram API (sharing is via the Android Share Sheet only), iOS, encrypted cloud sync, any LLM/AI-assisted text generation, wiring the notification-ignore counter to real OS-level notification tap callbacks (the counting logic exists and is tested, just not wired to the OS), and a richer per-category Friday harvest reminder scheduling UI (currently basic).
 
 ## Safety and privacy
 
