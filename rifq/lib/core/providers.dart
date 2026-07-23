@@ -26,6 +26,12 @@ final notificationRulesRepoProvider = Provider<NotificationRulesRepository>(
     (_) => LocalNotificationRulesRepository());
 final checkInRepoProvider =
     Provider<CheckInRepository>((_) => LocalCheckInRepository());
+final valuesRepoProvider =
+    Provider<ValuesRepository>((_) => LocalValuesRepository());
+
+/// قيم الحياة الحالية للبوصلة.
+final lifeValuesProvider = FutureProvider.autoDispose<List<LifeValue>>(
+    (ref) => ref.watch(valuesRepoProvider).all());
 
 final templateEngineProvider =
     Provider<ContentTemplateEngine>((_) => const LocalContentTemplateEngine());

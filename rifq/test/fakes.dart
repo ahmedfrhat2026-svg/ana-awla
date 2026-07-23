@@ -231,6 +231,37 @@ class FakeInstagramLauncher implements InstagramLauncher {
   }
 }
 
+class FakeValuesRepository implements ValuesRepository {
+  final List<LifeValue> values = [];
+
+  @override
+  Future<List<LifeValue>> all() async => List.unmodifiable(values);
+
+  @override
+  Future<void> choose(ValueKind kind) async {
+    if (values.any((v) => v.kind == kind)) return;
+    values.add(LifeValue(kind: kind, chosenAt: DateTime.now()));
+  }
+
+  @override
+  Future<void> remove(ValueKind kind) async =>
+      values.removeWhere((v) => v.kind == kind);
+
+  @override
+  Future<void> actOn(ValueKind kind) async {
+    final i = values.indexWhere((v) => v.kind == kind);
+    if (i >= 0) {
+      values[i] = values[i].actOn();
+    } else {
+      values.add(LifeValue(
+          kind: kind,
+          actionCount: 1,
+          chosenAt: DateTime.now(),
+          lastActedAt: DateTime.now()));
+    }
+  }
+}
+
 class FakeUsageStatsGateway implements UsageStatsGateway {
   bool permission = true;
   int minutes = 20;

@@ -21,6 +21,7 @@ Widget _app(Widget child, {List<Override> overrides = const []}) {
       notificationRulesRepoProvider
           .overrideWithValue(FakeNotificationRulesRepository()),
       checkInRepoProvider.overrideWithValue(FakeCheckInRepository()),
+      valuesRepoProvider.overrideWithValue(FakeValuesRepository()),
       schedulerProvider.overrideWithValue(FakeNotificationScheduler()),
       instagramLauncherProvider.overrideWithValue(FakeInstagramLauncher()),
       usageStatsProvider.overrideWithValue(FakeUsageStatsGateway()),

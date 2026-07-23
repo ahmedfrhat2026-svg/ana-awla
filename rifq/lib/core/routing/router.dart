@@ -10,6 +10,8 @@ import '../../features/harvest/harvest_archive_screen.dart';
 import '../../features/harvest/harvest_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/home/system_hub.dart';
+import '../../features/compass/decision_room_screen.dart';
+import '../../features/compass/values_garden_screen.dart';
 import '../../features/mirror/museum_of_returning_screen.dart';
 import '../../features/intentional_entry/intentional_entry_screen.dart';
 import '../../features/intentional_entry/usage_monitor_screen.dart';
@@ -41,6 +43,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/compass', builder: (_, __) => const CompassHubScreen()),
       GoRoute(
           path: '/sanctuary', builder: (_, __) => const SanctuaryHubScreen()),
+      GoRoute(
+        path: '/compass/values',
+        builder: (_, __) => const ValuesGardenScreen(),
+      ),
+      GoRoute(
+        path: '/compass/decision',
+        builder: (_, __) => const DecisionRoomScreen(),
+      ),
       GoRoute(
           path: '/onboarding', builder: (_, __) => const OnboardingScreen()),
       GoRoute(path: '/reset', builder: (_, __) => const ResetFlowScreen()),

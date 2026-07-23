@@ -1,3 +1,5 @@
+import 'package:sqflite/sqflite.dart' show ConflictAlgorithm;
+
 import 'app_database.dart';
 import 'models.dart';
 
@@ -54,6 +56,13 @@ abstract interface class NotificationRulesRepository {
 abstract interface class CheckInRepository {
   Future<int> add(DailyCheckIn checkIn);
   Future<DailyCheckIn?> byDate(String date);
+}
+
+abstract interface class ValuesRepository {
+  Future<List<LifeValue>> all();
+  Future<void> choose(ValueKind kind);
+  Future<void> remove(ValueKind kind);
+  Future<void> actOn(ValueKind kind);
 }
 
 // ---------------------------------------------------------------------------
@@ -259,5 +268,54 @@ class LocalCheckInRepository implements CheckInRepository {
     final rows = await d.query('daily_checkin',
         where: 'date = ?', whereArgs: [date], limit: 1);
     return rows.isEmpty ? null : DailyCheckIn.fromMap(rows.first);
+  }
+}
+
+class LocalValuesRepository implements ValuesRepository {
+  @override
+  Future<List<LifeValue>> all() async {
+    final d = await AppDatabase.instance.db;
+    final rows = await d.query('life_value', orderBy: 'id');
+    return rows.map(LifeValue.fromMap).toList();
+  }
+
+  @override
+  Future<void> choose(ValueKind kind) async {
+    final d = await AppDatabase.instance.db;
+    // كل قيمة صف واحد فريد (kind UNIQUE) — لا تكرار عند إعادة الاختيار.
+    await d.insert(
+      'life_value',
+      LifeValue(kind: kind, chosenAt: DateTime.now()).toMap(),
+      conflictAlgorithm: ConflictAlgorithm.ignore,
+    );
+  }
+
+  @override
+  Future<void> remove(ValueKind kind) async {
+    final d = await AppDatabase.instance.db;
+    await d.delete('life_value', where: 'kind = ?', whereArgs: [kind.name]);
+  }
+
+  @override
+  Future<void> actOn(ValueKind kind) async {
+    final d = await AppDatabase.instance.db;
+    final rows = await d.query('life_value',
+        where: 'kind = ?', whereArgs: [kind.name], limit: 1);
+    if (rows.isEmpty) {
+      // خدمة قيمة غير مختارة تختارها وتسجّل أول فعل.
+      await d.insert(
+          'life_value',
+          LifeValue(
+                  kind: kind,
+                  actionCount: 1,
+                  chosenAt: DateTime.now(),
+                  lastActedAt: DateTime.now())
+              .toMap());
+      return;
+    }
+    final current = LifeValue.fromMap(rows.first);
+    final updated = current.actOn();
+    await d.update('life_value', updated.toMap(),
+        where: 'kind = ?', whereArgs: [kind.name]);
   }
 }

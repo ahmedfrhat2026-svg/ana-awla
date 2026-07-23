@@ -6,6 +6,8 @@ import '../../design_system/components/rifq_scaffold.dart';
 import '../../design_system/components/rifq_surfaces.dart';
 import '../../design_system/rifq_spacing.dart';
 import '../../design_system/rifq_theme_extensions.dart';
+import '../../core/providers.dart';
+import '../compass/life_value.dart';
 import '../mirror/return_moment.dart';
 import '../mirror/widgets/still_water.dart';
 
@@ -200,41 +202,101 @@ class MirrorHubScreen extends ConsumerWidget {
 }
 
 /// 🧭 البوصلة — اختر اتجاهك.
-class CompassHubScreen extends StatelessWidget {
+/// تبدأ بملاحظة وصفية عن قربك من قيمك، ثم مداخل الاتجاه والقرار.
+class CompassHubScreen extends ConsumerWidget {
   const CompassHubScreen({super.key});
 
+  static const _entries = [
+    HubEntry(
+      title: 'حديقة القيم',
+      subtitle: 'ما تريد أن تمنحه مساحة — تنمو ولا تموت',
+      icon: Icons.local_florist_outlined,
+      route: '/compass/values',
+    ),
+    HubEntry(
+      title: 'غرفة القرار',
+      subtitle: 'هل هذا اختيار أم هروب؟',
+      icon: Icons.psychology_alt_outlined,
+      route: '/compass/decision',
+    ),
+    HubEntry(
+      title: 'أذاكر',
+      subtitle: 'أصغر خطوة ثم جلسة تركيز',
+      icon: Icons.menu_book_outlined,
+      route: '/focus',
+    ),
+    HubEntry(
+      title: 'المؤثر الهادئ',
+      subtitle: 'حوّل ما عشته لمحتوى هادف',
+      icon: Icons.edit_note,
+      route: '/creator',
+    ),
+    HubEntry(
+      title: 'وقتك على السوشيال',
+      subtitle: 'اعرف اتجاه وقتك بوعي',
+      icon: Icons.timelapse_outlined,
+      route: '/usage',
+    ),
+    HubEntry(
+      title: 'دخول إنستجرام بنية',
+      subtitle: 'قرار مقصود، لا انسحاب',
+      icon: Icons.photo_camera_outlined,
+      route: '/instagram',
+    ),
+  ];
+
   @override
-  Widget build(BuildContext context) => const SystemHubScreen(
-        title: 'البوصلة',
-        intro: 'اختر ما يستحق طاقتك — لا ما يبدو مثاليًا.',
-        entries: [
-          HubEntry(
-            title: 'أذاكر',
-            subtitle: 'أصغر خطوة ثم جلسة تركيز',
-            icon: Icons.menu_book_outlined,
-            route: '/focus',
+  Widget build(BuildContext context, WidgetRef ref) {
+    final palette = RifqPalette.of(context);
+    final values = ref.watch(lifeValuesProvider).valueOrNull;
+    return RifqScaffold(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          RifqPageHeader(
+            title: 'البوصلة',
+            subtitle: 'اختر ما يستحق طاقتك — لا ما يبدو مثاليًا.',
+            onBack: () => context.pop(),
           ),
-          HubEntry(
-            title: 'المؤثر الهادئ',
-            subtitle: 'حوّل ما عشته لمحتوى هادف',
-            icon: Icons.edit_note,
-            route: '/creator',
-          ),
-          HubEntry(
-            title: 'وقتك على السوشيال',
-            subtitle: 'اعرف اتجاه وقتك بوعي',
-            icon: Icons.timelapse_outlined,
-            route: '/usage',
-          ),
-          HubEntry(
-            title: 'دخول إنستجرام بنية',
-            subtitle: 'قرار مقصود، لا انسحاب',
-            icon: Icons.photo_camera_outlined,
-            route: '/instagram',
-          ),
+          if (values != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: RifqSpacing.lg),
+              child: Text(compassObservation(values),
+                  style: Theme.of(context).textTheme.titleMedium),
+            ),
+          for (final e in _entries) ...[
+            RifqOrganicSurface(
+              onTap: () => context.push(e.route),
+              padding: const EdgeInsets.all(RifqSpacing.md),
+              child: Row(
+                children: [
+                  Icon(e.icon, color: palette.forest, size: 28),
+                  const SizedBox(width: RifqSpacing.md),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(e.title,
+                            style: Theme.of(context).textTheme.titleMedium),
+                        const SizedBox(height: 2),
+                        Text(e.subtitle,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(color: palette.textSecondary)),
+                      ],
+                    ),
+                  ),
+                  Icon(Icons.chevron_left, color: palette.textSecondary),
+                ],
+              ),
+            ),
+            const SizedBox(height: RifqSpacing.sm),
+          ],
         ],
-        footer: 'اتجاهك يتحدد بأصغر خطوة لها معنى.',
-      );
+      ),
+    );
+  }
 }
 
 /// 🕊️ الملجأ — افهم ما تحتاجه الآن.

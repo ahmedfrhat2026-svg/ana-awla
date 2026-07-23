@@ -14,7 +14,7 @@ class AppDatabase {
     final path = '${await getDatabasesPath()}/rifq.db';
     _db = await openDatabase(
       path,
-      version: 3,
+      version: 4,
       onCreate: _onCreate,
       onUpgrade: migrate,
     );
@@ -24,6 +24,7 @@ class AppDatabase {
   /// ترقيات المخطط:
   /// v2: صورة الملاحظات + تتبع التفاعل مع التنبيهات.
   /// v3: الفويس نوت + رقم آخر نسخة مشاهدة + حد السوشيال اليومي.
+  /// v4: قيم الحياة (البوصلة) — حديقة تنمو ولا تموت.
   static Future<void> migrate(
       DatabaseExecutor d, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
@@ -41,7 +42,18 @@ class AppDatabase {
       await d.execute(
           'ALTER TABLE user_settings ADD COLUMN socialLimitMinutes INTEGER');
     }
+    if (oldVersion < 4) {
+      await d.execute(_lifeValueTable);
+    }
   }
+
+  static const _lifeValueTable = '''
+      CREATE TABLE life_value(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        kind TEXT UNIQUE, actionCount INTEGER,
+        chosenAt TEXT, lastActedAt TEXT
+      )
+    ''';
 
   /// للاختبارات: حقن قاعدة بيانات جاهزة (in-memory).
   set testDatabase(Database database) => _db = database;
@@ -127,6 +139,7 @@ class AppDatabase {
         ignoredCount INTEGER, lastTriggeredAt TEXT, lastEngagedAt TEXT
       )
     ''');
+    await d.execute(_lifeValueTable);
     // القيم الافتراضية: إعدادات هادئة وثلاثة تنبيهات يوميًا كحد أقصى.
     await d.insert('user_settings', const UserSettings().toMap());
     const defaults = [

@@ -51,6 +51,18 @@ enum NotificationCategory {
   compassionAfterMiss,
 }
 
+/// قيم الحياة المقترحة (البوصلة). التمثيل يبقى مجرّدًا بلا رمزية جامدة.
+enum ValueKind {
+  knowledge,
+  health,
+  faith,
+  family,
+  calm,
+  creativity,
+  service,
+  work,
+}
+
 /// أنواع الفتور في «بروتوكول الفتور».
 enum FatigueKind {
   exhausted,
@@ -705,5 +717,52 @@ class NotificationRule {
         lastTriggeredAt:
             DateTime.tryParse(m['lastTriggeredAt'] as String? ?? ''),
         lastEngagedAt: DateTime.tryParse(m['lastEngagedAt'] as String? ?? ''),
+      );
+}
+
+/// قيمة حياة اختارها المستخدم مع تتبّع أفعالها (بيانات فقط —
+/// منطق النمو في features/compass/life_value.dart).
+class LifeValue {
+  const LifeValue({
+    this.id,
+    required this.kind,
+    this.actionCount = 0,
+    this.chosenAt,
+    this.lastActedAt,
+  });
+
+  final int? id;
+  final ValueKind kind;
+  final int actionCount;
+  final DateTime? chosenAt;
+  final DateTime? lastActedAt;
+
+  LifeValue actOn({DateTime? at}) => copyWith(
+        actionCount: actionCount + 1,
+        lastActedAt: at ?? DateTime.now(),
+      );
+
+  LifeValue copyWith({int? actionCount, DateTime? lastActedAt}) => LifeValue(
+        id: id,
+        kind: kind,
+        actionCount: actionCount ?? this.actionCount,
+        chosenAt: chosenAt,
+        lastActedAt: lastActedAt ?? this.lastActedAt,
+      );
+
+  Map<String, Object?> toMap() => {
+        if (id != null) 'id': id,
+        'kind': _e(kind),
+        'actionCount': actionCount,
+        'chosenAt': (chosenAt ?? DateTime.now()).toIso8601String(),
+        'lastActedAt': lastActedAt?.toIso8601String(),
+      };
+
+  factory LifeValue.fromMap(Map<String, Object?> m) => LifeValue(
+        id: m['id'] as int?,
+        kind: _d(ValueKind.values, m['kind'], ValueKind.calm),
+        actionCount: m['actionCount'] as int? ?? 0,
+        chosenAt: DateTime.tryParse(m['chosenAt'] as String? ?? ''),
+        lastActedAt: DateTime.tryParse(m['lastActedAt'] as String? ?? ''),
       );
 }
