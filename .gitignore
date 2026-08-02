@@ -25,3 +25,12 @@ pubspec.lock
 # Misc
 .DS_Store
 Thumbs.db
+
+# Obsidian Sync - sensitive files
+credentials.json
+token.pickle
+.obsidian_sync/
+*.pyc
+__pycache__/
+.venv/
+venv/
